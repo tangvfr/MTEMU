@@ -1,2 +1,2 @@
 # MJNES
-Nes emulator in Java
+NES emulator in Java
