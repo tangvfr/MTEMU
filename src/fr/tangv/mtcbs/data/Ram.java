@@ -31,4 +31,9 @@ public class Ram extends DataCell {
 		this.data[adr] = data;
 	}
 
+	@Override
+	public String toString() {
+		return "Ram [size=" + this.size() + "]";
+	}
+	
 }

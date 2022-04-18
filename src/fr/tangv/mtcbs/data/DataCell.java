@@ -1,7 +1,5 @@
 package fr.tangv.mtcbs.data;
 
-import java.util.Arrays;
-
 /**
  * Data est t'une cellule de stockage (stocké en RAM)
  * @author tangv
@@ -46,7 +44,7 @@ public abstract class DataCell {
 
 	@Override
 	public String toString() {
-		return "DataCell [data=" + Arrays.toString(data) + "]";
+		return "DataCell [size=" + this.size() + "]";
 	}
 	
 }

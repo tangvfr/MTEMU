@@ -10,7 +10,9 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Test 1");
 		try {
-			NESCartridge nesc = new FileNESCartridge("a file");
+			NESCartridge nesc = new FileNESCartridge(args[0]);
+			System.out.println("PrgRomSize: " + nesc.getPrgRomSize());
+			System.out.println("Mapper: " + nesc.getMapperNumber());
 			System.out.println(nesc.toString());
 		} catch (IOException e) {
 			e.printStackTrace();

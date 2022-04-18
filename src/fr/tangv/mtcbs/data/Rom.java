@@ -14,4 +14,9 @@ public class Rom extends DataCell {
 		super(data);
 	}
 	
+	@Override
+	public String toString() {
+		return "Rom [size=" + this.size() + "]";
+	}
+	
 }
