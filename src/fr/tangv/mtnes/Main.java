@@ -1,9 +1,9 @@
-package fr.tangv.mtcbs;
+package fr.tangv.mtnes;
 
 import java.io.IOException;
 
-import fr.tangv.mtcbs.castridge.FileNESCartridge;
-import fr.tangv.mtcbs.castridge.NESCartridge;
+import fr.tangv.mtnes.castridge.FileNESCartridge;
+import fr.tangv.mtnes.castridge.NESCartridge;
 
 public class Main {
 
@@ -13,7 +13,7 @@ public class Main {
 			NESCartridge nesc = new FileNESCartridge(args[0]);
 			System.out.println("PrgRomSize: " + nesc.getPrgRomSize());
 			System.out.println("Mapper: " + nesc.getMapperNumber());
-			System.out.println(nesc.toString());
+			System.out.println(nesc);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

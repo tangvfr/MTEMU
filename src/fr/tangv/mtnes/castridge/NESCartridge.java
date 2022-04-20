@@ -1,6 +1,6 @@
-package fr.tangv.mtcbs.castridge;
+package fr.tangv.mtnes.castridge;
 
-import fr.tangv.mtcbs.data.Rom;
+import fr.tangv.mtemu.bus.Bus16A8D;
 
 public abstract class NESCartridge {
 
@@ -8,9 +8,9 @@ public abstract class NESCartridge {
 	public static final boolean HORIZONTAL_MIRRORING_ARRANGEMENT = false;
 	public static final boolean VERTICAL_MIRRORING_ARRANGEMENT = true;
 	
-	public abstract Rom getPrgRom();
-	public abstract Rom getChrRom();
-	public abstract Rom getTrainerRom();
+	public abstract Bus16A8D getPrgRom();
+	public abstract Bus16A8D getChrRom();
+	public abstract Bus16A8D getTrainerRom();
 	
 	public abstract int getPrgRomSize();
 	public abstract int getChrRomSize();

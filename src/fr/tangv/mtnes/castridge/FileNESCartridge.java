@@ -1,17 +1,17 @@
-package fr.tangv.mtcbs.castridge;
+package fr.tangv.mtnes.castridge;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import fr.tangv.mtcbs.data.Rom;
+import fr.tangv.mtemu.bus.Bus16A8D;
 
 public class FileNESCartridge extends NESCartridge {
 
-	private Rom trainerRom;
-	private Rom prgRom;
-	private Rom chrRom;
+	private Bus16A8D trainerRom;
+	private Bus16A8D prgRom;
+	private Bus16A8D chrRom;
 	
 	private int prgRomSize;
 	private int chrRomSize;
@@ -50,13 +50,13 @@ public class FileNESCartridge extends NESCartridge {
 			
 			//to jump to 0x16
 			readBytes(in, new byte[10]);
-			
+			/*
 			//Creation des ROM
 			//trainer
 			if (this.hasTrainer()) {
 				byte[] trainerBuf = new byte[512];
 				readBytes(in, trainerBuf);
-				this.trainerRom = new Rom(trainerBuf);
+				this.trainerRom = new Memory(trainerBuf);
 			} else {
 				this.trainerRom = null;
 			}
@@ -64,17 +64,17 @@ public class FileNESCartridge extends NESCartridge {
 			//prgRom
 			byte[] prgBuf = new byte[this.prgRomSize];
 			readBytes(in, prgBuf);
-			this.prgRom = new Rom(prgBuf);
+			this.prgRom = new Memory(prgBuf);
 			
 			//chrRom
 			if (!this.isUseChrRam()) {
 				byte[] chrRomBuf = new byte[this.chrRomSize];
 				readBytes(in, chrRomBuf);
-				this.chrRom= new Rom(chrRomBuf);
+				this.chrRom= new Memory(chrRomBuf);
 			} else {
 				this.chrRom = null;
 			}
-			
+			*/
 			//close stream
 			in.close();
 		} else {
@@ -100,17 +100,17 @@ public class FileNESCartridge extends NESCartridge {
 	}
 	
 	@Override
-	public Rom getPrgRom() {
+	public Bus16A8D getPrgRom() {
 		return this.prgRom;
 	}
 
 	@Override
-	public Rom getChrRom() {
+	public Bus16A8D getChrRom() {
 		return this.chrRom;
 	}
 
 	@Override
-	public Rom getTrainerRom() {
+	public Bus16A8D getTrainerRom() {
 		return this.trainerRom;
 	}
 
