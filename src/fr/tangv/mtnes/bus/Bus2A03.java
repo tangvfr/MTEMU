@@ -2,7 +2,7 @@ package fr.tangv.mtnes.bus;
 
 import fr.tangv.mtemu.bus.Bus16A8D;
 
-public class Bus6502 extends Bus16A8D {
+public class Bus2A03 extends Bus16A8D {
 
 	//https://www.nesdev.com/NESDoc.pdf
 	
@@ -28,7 +28,7 @@ public class Bus6502 extends Bus16A8D {
 	public static final short PRG_ROM_LOW = (short) 0x8000;
 	public static final short PRG_ROM_HIGH = (short) 0xC000;
 	
-	public Bus6502() {
+	public Bus2A03() {
 		
 	}
 	

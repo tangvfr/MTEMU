@@ -1,5 +1,10 @@
 package fr.tangv.mtemu.cpu;
 
-public abstract class Cpu {
+import fr.tangv.mtemu.bus.Bus;
 
+public interface Cpu<T extends Bus<?, ?>> {
+
+	public T getBus();
+	public String getName();
+	
 }
