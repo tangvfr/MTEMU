@@ -7,11 +7,13 @@ import fr.tangv.mtnes.cpu.Cpu2A03;
 public abstract class Opcode2A03 implements Opcode<Cpu2A03, Byte> {
 
 	protected Cpu2A03 cpu;
+	protected Bus2A03 bus;
 	private Byte code;
 	private int cycle;
 	
 	public Opcode2A03(Cpu2A03 cpu, Byte code, int cycle) {
 		this.cpu = cpu;
+		this.bus = this.cpu.getBus();
 		this.code = code;
 		this.cycle = cycle;
 		this.cpu.setOpcode(this);
@@ -32,22 +34,19 @@ public abstract class Opcode2A03 implements Opcode<Cpu2A03, Byte> {
 	}
 	
 	public short adrIndirect() {
-		Bus2A03 bus = this.cpu.getBus();
-		short adrD = (short) (this.cpu.nextPC() | (this.cpu.nextPC() << 8));
-		return (short) (bus.read(adrD) | (bus.read((short) (adrD + 1)) << 8));
+		short adr = (short) (this.cpu.nextPC() | (this.cpu.nextPC() << 8));
+		return (short) (this.bus.read(adr) | (this.bus.read((short) (adr + 1)) << 8));
 	}
 	
 	public short adrXIndirect() {
-		Bus2A03 bus = this.cpu.getBus();
-		short adrD = (byte) (this.cpu.nextPC() + this.cpu.getX());
-		return (short) (bus.read(adrD) | (bus.read((short) (adrD + 1)) << 8));
+		short adr = (byte) (this.cpu.nextPC() + this.cpu.getX());
+		return (short) (this.bus.read(adr) | (this.bus.read((short) (adr + 1)) << 8));
 		//unsigned without carry
 	}
 	
 	public short adrIndirectY() {
-		Bus2A03 bus = this.cpu.getBus();
-		short adrD = (byte) this.cpu.nextPC();
-		return (short) ((bus.read(adrD) | (bus.read((short) (adrD + 1)) << 8)) + Byte.toUnsignedInt(this.cpu.getY()));
+		short adr = (byte) this.cpu.nextPC();
+		return (short) ((this.bus.read(adr) | (this.bus.read((short) (adr + 1)) << 8)) + Byte.toUnsignedInt(this.cpu.getY()));
 		//unsigned with carry
 	}
 	
