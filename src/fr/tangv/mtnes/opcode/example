@@ -1,0 +1,16 @@
+package fr.tangv.mtnes.opcode;
+
+import fr.tangv.mtnes.cpu.Cpu2A03;
+
+public class Opcode extends Opcode2A03 {
+
+	public Opcode() {
+		super((byte) 0x, );
+	}
+
+	@Override
+	public void execute(Cpu2A03 cpu) {
+		
+	}
+
+}
