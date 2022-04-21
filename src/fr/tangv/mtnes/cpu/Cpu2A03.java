@@ -1,8 +1,11 @@
 package fr.tangv.mtnes.cpu;
 
+import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.cpu.Cpu;
 import fr.tangv.mtnes.bus.Bus2A03;
+import fr.tangv.mtnes.opcode.BusDataProvider;
 import fr.tangv.mtnes.opcode.Opcode2A03;
+import fr.tangv.mtnes.opcode.OpcodeAND;
 
 public class Cpu2A03 extends Cpu<Bus2A03> {
 
@@ -29,7 +32,7 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	/*PC	program counter	(16 bit)*/
 	private short pc;
 	/*AC	accumulator	(8 bit)*/
-	private byte ac;
+	private BusData<Byte> ac;
 	/*X	X register	(8 bit)*/
 	private byte x;
 	/*Y	Y register	(8 bit)*/
@@ -42,9 +45,19 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	
 	public Cpu2A03(Bus2A03 bus) {
 		super("Ricoh 2A03", bus);
+		this.ac = new BusData<Byte>((byte) 0);
 		reset();
 		this.opcodes = new Opcode2A03[0xFF];
-		
+		//opcodes
+		new OpcodeAND(this, BusDataProvider.IMMEDIATE, (byte) 0x29, 2);
+		new OpcodeAND(this, BusDataProvider.ZEROPAGE, (byte) 0x25, 3);
+		new OpcodeAND(this, BusDataProvider.ZEROPAGE_X, (byte) 0x35, 4);
+		new OpcodeAND(this, BusDataProvider.ABSOLUTE, (byte) 0x2D, 4);
+		new OpcodeAND(this, BusDataProvider.ABSOLUTE_X, (byte) 0x3D, 4);
+		new OpcodeAND(this, BusDataProvider.ABSOLUTE_Y, (byte) 0x39, 4);
+		new OpcodeAND(this, BusDataProvider.INDIRECT_X, (byte) 0x21, 6);
+		new OpcodeAND(this, BusDataProvider.INDIRECT_Y, (byte) 0x31, 5);
+		//new Opcode(this, BusDataProvider., (byte) 0x, );
 	}
 	
 	
@@ -54,7 +67,7 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	
 	public void reset() {
 		this.pc = Bus2A03.PRG_ROM_LOW;
-		this.ac = 0;
+		this.ac.setData((byte) 0);
 		this.x = 0;
 		this.y = 0;
 		this.sp = (byte) 0xFF;
@@ -63,6 +76,12 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	
 	public Byte nextPC() {
 		Byte data = this.getBus().read(pc);
+		pc++;
+		return data;
+	}
+	
+	public BusData<Byte> nextCellPC() {
+		BusData<Byte> data = this.getBus().getCell(pc);
 		pc++;
 		return data;
 	}
@@ -92,12 +111,8 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	public byte getSP() {
 		return sp;
 	}
-
-	public void setAC(Byte ac) {
-		this.ac = ac;
-	}
 	
-	public Byte getAC() {
+	public BusData<Byte> getAC() {
 		return this.ac;
 	}
 	
@@ -119,6 +134,10 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	
 	public byte getSR() {
 		return this.sr;
+	}
+	
+	public void setSR(byte sr) {
+		this.sr = sr;
 	}
 	
 	public boolean isSetFlags(byte flags) {
