@@ -27,9 +27,7 @@ public class Bus2A03 extends Bus16A8D {
 	//PRG ROM
 	public static final short PRG_ROM_LOW = (short) 0x8000;
 	public static final short PRG_ROM_HIGH = (short) 0xC000;
-	
-	public Bus2A03() {
-		
-	}
+	//MAX
+	public static final short MAX = (short) 0xFFFF;
 	
 }
