@@ -53,6 +53,7 @@ public abstract class BusDataProvider {
 		return bus.getCell((short) adr);
 	};
 	
+	/*
 	public static final GetterBusData RELATIVE = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		short pc = (short) (0x00FF & cpu.getPC());
 		short adr = (short) (pc + cpu.nextPC());//sign use
@@ -62,6 +63,7 @@ public abstract class BusDataProvider {
 			op.add2CalcCycle();
 		return bus.getCell((short) adr);// /!\ a tester
 	};
+	*/
 	
 	public static final GetterBusData ZEROPAGE = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		return bus.getCell((short) (0x00FF & cpu.nextPC()));

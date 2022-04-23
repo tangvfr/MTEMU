@@ -4,7 +4,9 @@ import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.cpu.Cpu;
 import fr.tangv.mtnes.bus.Bus2A03;
 import fr.tangv.mtnes.opcode.BusDataProvider;
-import fr.tangv.mtnes.opcode.Opcode2A03;
+import fr.tangv.mtnes.opcode.AbstarctOpcode2A03;
+import fr.tangv.mtnes.opcode.BranchOpcode2A03;
+import fr.tangv.mtnes.opcode.OpcodeADC;
 import fr.tangv.mtnes.opcode.OpcodeAND;
 
 public class Cpu2A03 extends Cpu<Bus2A03> {
@@ -28,7 +30,7 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	public static final short IRQ = (short) 0xFFFE;
 	
 	//registre
-	private Opcode2A03[] opcodes;
+	private AbstarctOpcode2A03[] opcodes;
 	/*PC	program counter	(16 bit)*/
 	private short pc;
 	/*AC	accumulator	(8 bit)*/
@@ -47,8 +49,18 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		super("Ricoh 2A03", bus);
 		this.ac = new BusData<Byte>((byte) 0);
 		reset();
-		this.opcodes = new Opcode2A03[0xFF];
+		this.opcodes = new AbstarctOpcode2A03[0xFF];
 		//opcodes
+		//ADC
+		new OpcodeADC(this, BusDataProvider.IMMEDIATE, (byte) 0x69, 2);
+		new OpcodeADC(this, BusDataProvider.ZEROPAGE, (byte) 0x65, 3);
+		new OpcodeADC(this, BusDataProvider.ZEROPAGE_X, (byte) 0x75, 4);
+		new OpcodeADC(this, BusDataProvider.ABSOLUTE, (byte) 0x6D, 4);
+		new OpcodeADC(this, BusDataProvider.ABSOLUTE_X, (byte) 0x7D, 4);
+		new OpcodeADC(this, BusDataProvider.ABSOLUTE_Y, (byte) 0x79, 4);
+		new OpcodeADC(this, BusDataProvider.INDIRECT_X, (byte) 0x61, 6);
+		new OpcodeADC(this, BusDataProvider.INDIRECT_Y, (byte) 0x71, 5);
+		//AND
 		new OpcodeAND(this, BusDataProvider.IMMEDIATE, (byte) 0x29, 2);
 		new OpcodeAND(this, BusDataProvider.ZEROPAGE, (byte) 0x25, 3);
 		new OpcodeAND(this, BusDataProvider.ZEROPAGE_X, (byte) 0x35, 4);
@@ -57,12 +69,29 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		new OpcodeAND(this, BusDataProvider.ABSOLUTE_Y, (byte) 0x39, 4);
 		new OpcodeAND(this, BusDataProvider.INDIRECT_X, (byte) 0x21, 6);
 		new OpcodeAND(this, BusDataProvider.INDIRECT_Y, (byte) 0x31, 5);
+		//ASL
+		new OpcodeAND(this, BusDataProvider.ACCUMULATOR, (byte) 0x0A, 2);
+		new OpcodeAND(this, BusDataProvider.ZEROPAGE, (byte) 0x06, 5);
+		new OpcodeAND(this, BusDataProvider.ZEROPAGE_X, (byte) 0x16, 6);
+		new OpcodeAND(this, BusDataProvider.ABSOLUTE, (byte) 0x0E, 6);
+		new OpcodeAND(this, BusDataProvider.ABSOLUTE_X, (byte) 0x1E, 7);
+		//BCC
+		new BranchOpcode2A03(this, FLAG_C, false, (byte) 0x90, 2);
+		//BCS
+		new BranchOpcode2A03(this, FLAG_C, true, (byte) 0xB0, 2);
+		//BEQ
+		new BranchOpcode2A03(this, FLAG_Z, true, (byte) 0xF0, 2);
+		//BIT
+		
 		//new Opcode(this, BusDataProvider., (byte) 0x, );
 	}
 	
 	
-	public void setOpcode(Opcode2A03 opcode) {
-		this.opcodes[Byte.toUnsignedInt(opcode.getCode())] = opcode; 
+	public void setOpcode(AbstarctOpcode2A03 opcode) {
+		int adr = Byte.toUnsignedInt(opcode.getCode());
+		if (this.opcodes[adr] != null)
+			throw new IllegalArgumentException("Opcode with code " + Integer.toHexString(adr) + " is already set !");
+		this.opcodes[adr] = opcode;
 	}
 	
 	public void reset() {
