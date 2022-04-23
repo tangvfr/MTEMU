@@ -22,6 +22,12 @@ import fr.tangv.mtnes.opcode.notabstract.OpcodeEOR;
 import fr.tangv.mtnes.opcode.notabstract.OpcodeINC;
 import fr.tangv.mtnes.opcode.notabstract.OpcodeINX;
 import fr.tangv.mtnes.opcode.notabstract.OpcodeINY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeJMP;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeJMPI;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeJSR;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeLDA;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeLDX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeLDY;
 
 public class Cpu2A03 extends Cpu<Bus2A03> {
 
@@ -168,8 +174,35 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		//INY
 		new OpcodeINY(this, (byte) 0xC8, 2);
 		//JMP
+		new OpcodeJMP(this, (byte) 0x4C, 3);
+		new OpcodeJMPI(this, (byte) 0x6C, 5);
+		//JSR
+		new OpcodeJSR(null, (byte) 0x20, 6);
+		//LDA
+		new OpcodeLDA(this, BusDataProvider.IMMEDIATE, (byte) 0xA9, 2);
+		new OpcodeLDA(this, BusDataProvider.ZEROPAGE, (byte) 0xA5, 3);
+		new OpcodeLDA(this, BusDataProvider.ZEROPAGE_X, (byte) 0xB5, 4);
+		new OpcodeLDA(this, BusDataProvider.ABSOLUTE, (byte) 0xAD, 4);
+		new OpcodeLDA(this, BusDataProvider.ABSOLUTE_X, (byte) 0xBD, 4);
+		new OpcodeLDA(this, BusDataProvider.ABSOLUTE_Y, (byte) 0xB9, 4);
+		new OpcodeLDA(this, BusDataProvider.INDIRECT_X, (byte) 0xA1, 6);
+		new OpcodeLDA(this, BusDataProvider.INDIRECT_Y, (byte) 0xB1, 5);
+		//LDX
+		new OpcodeLDX(this, BusDataProvider.IMMEDIATE, (byte) 0xA2, 2);
+		new OpcodeLDX(this, BusDataProvider.ZEROPAGE, (byte) 0xA6, 3);
+		new OpcodeLDX(this, BusDataProvider.ZEROPAGE_Y, (byte) 0xB6, 4);
+		new OpcodeLDX(this, BusDataProvider.ABSOLUTE, (byte) 0xAE, 4);
+		new OpcodeLDX(this, BusDataProvider.ABSOLUTE_Y, (byte) 0xBE, 4);
+		//LDX
+		new OpcodeLDY(this, BusDataProvider.IMMEDIATE, (byte) 0xA0, 2);
+		new OpcodeLDY(this, BusDataProvider.ZEROPAGE, (byte) 0xA4, 3);
+		new OpcodeLDY(this, BusDataProvider.ZEROPAGE_X, (byte) 0xB4, 4);
+		new OpcodeLDY(this, BusDataProvider.ABSOLUTE, (byte) 0xAC, 4);
+		new OpcodeLDY(this, BusDataProvider.ABSOLUTE_X, (byte) 0xBC, 4);
+		//LSR
 		
 				
+		
 		//new Opcode(this, BusDataProvider., (byte) 0x, );
 	}
 	

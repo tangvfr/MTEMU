@@ -13,6 +13,7 @@ public abstract class AbstarctOpcode2A03NCC implements Opcode<Cpu2A03, Byte> {
 	protected final Cpu2A03 cpu;
 	private final Byte code;
 	private final int cycle;
+	private boolean chPC = false;
 	
 	public AbstarctOpcode2A03NCC(Cpu2A03 cpu, Byte code, int cycle) {
 		if (cpu == null)
@@ -32,6 +33,14 @@ public abstract class AbstarctOpcode2A03NCC implements Opcode<Cpu2A03, Byte> {
 	
 	protected int getCycle() {
 		return this.cycle;
+	}
+	
+	public void setChangePC() {
+		this.chPC = true;
+	}
+	
+	public boolean isChangePC() {
+		return this.chPC;
 	}
 	
 	public void setNZFlag(Byte data) {
