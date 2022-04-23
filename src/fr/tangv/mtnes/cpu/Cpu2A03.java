@@ -17,6 +17,10 @@ import fr.tangv.mtnes.opcode.OpcodeCPY;
 import fr.tangv.mtnes.opcode.OpcodeDEC;
 import fr.tangv.mtnes.opcode.OpcodeDEX;
 import fr.tangv.mtnes.opcode.OpcodeDEY;
+import fr.tangv.mtnes.opcode.OpcodeEOR;
+import fr.tangv.mtnes.opcode.OpcodeINC;
+import fr.tangv.mtnes.opcode.OpcodeINX;
+import fr.tangv.mtnes.opcode.OpcodeINY;
 import fr.tangv.mtnes.opcode.SetFlagOpcode2A4;
 
 public class Cpu2A03 extends Cpu<Bus2A03> {
@@ -146,8 +150,26 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		//DEY
 		new OpcodeDEY(this, (byte) 0x88, 2);
 		//EOR
+		new OpcodeEOR(this, BusDataProvider.IMMEDIATE, (byte) 0x49, 2);
+		new OpcodeEOR(this, BusDataProvider.ZEROPAGE, (byte) 0x45, 3);
+		new OpcodeEOR(this, BusDataProvider.ZEROPAGE_X, (byte) 0x55, 4);
+		new OpcodeEOR(this, BusDataProvider.ABSOLUTE, (byte) 0x4D, 4);
+		new OpcodeEOR(this, BusDataProvider.ABSOLUTE_X, (byte) 0x5D, 4);
+		new OpcodeEOR(this, BusDataProvider.ABSOLUTE_Y, (byte) 0x59, 4);
+		new OpcodeEOR(this, BusDataProvider.INDIRECT_X, (byte) 0x41, 6);
+		new OpcodeEOR(this, BusDataProvider.INDIRECT_Y, (byte) 0x51, 5);
+		//DEC
+		new OpcodeINC(this, BusDataProvider.ZEROPAGE, (byte) 0xE6, 5);
+		new OpcodeINC(this, BusDataProvider.ZEROPAGE_X, (byte) 0xF6, 6);
+		new OpcodeINC(this, BusDataProvider.ABSOLUTE, (byte) 0xEE, 6);
+		new OpcodeINC(this, BusDataProvider.ABSOLUTE_X, (byte) 0xFE, 7);
+		//INX
+		new OpcodeINX(this, (byte) 0xE8, 2);
+		//INY
+		new OpcodeINY(this, (byte) 0xC8, 2);
+		//JMP
 		
-		
+				
 		//new Opcode(this, BusDataProvider., (byte) 0x, );
 	}
 	
