@@ -5,56 +5,58 @@ import fr.tangv.mtnes.cpu.Cpu2A03;
 
 public abstract class BusDataProvider {
 	
-	public static final GetterBusData ACCUMULATOR = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ACCUMULATOR = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		return cpu.getAC();
 	};
 	
-	public static final GetterBusData ABSOLUTE = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ABSOLUTE = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		return bus.getCell((short) (cpu.nextPC() | (cpu.nextPC() << 8)));
 	};
 	
-	public static final GetterBusData ABSOLUTE_X = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ABSOLUTE_X = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		int adr = (cpu.nextPC() | (cpu.nextPC() << 8)) + Byte.toUnsignedInt(cpu.getX());
-		if (adr > 0xFFFF)
+		if (adr > 0x0000_FFFF)
 			op.add1CalcCycle();
 		return bus.getCell((short) adr);
 	};
 	
-	public static final GetterBusData ABSOLUTE_Y = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ABSOLUTE_Y = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		int adr = (cpu.nextPC() | (cpu.nextPC() << 8)) + Byte.toUnsignedInt(cpu.getY());
-		if (adr > 0xFFFF)
+		if (adr > 0x0000_FFFF)
 			op.add1CalcCycle();
 		return bus.getCell((short) adr);
 	};
 	
-	public static final GetterBusData IMMEDIATE = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData IMMEDIATE = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		return cpu.nextCellPC();
 	};
 	
-	public static final GetterBusData IMPLIED = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	/*
+	public static final GetterBusData IMPLIED = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		return null;
 	};
+	*/
 	
-	public static final GetterBusData INDIRECT	 = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData INDIRECT	 = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		short adr = (short) (cpu.nextPC() | (cpu.nextPC() << 8));
 		return bus.getCell((short) (bus.read(adr) | (bus.read((short) (adr + 1)) << 8)));
 	};
 	
-	public static final GetterBusData INDIRECT_X = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData INDIRECT_X = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		short adr = (byte) (cpu.nextPC() + cpu.getX());
 		return bus.getCell((short) (bus.read(adr) | (bus.read((short) (adr + 1)) << 8)));
 	};	
 	
-	public static final GetterBusData INDIRECT_Y = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData INDIRECT_Y = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		short adrT = (byte) cpu.nextPC();
 		int adr = (bus.read(adrT) | (bus.read((short) (adrT + 1)) << 8)) + Byte.toUnsignedInt(cpu.getY());
-		if (adr > 0xFFFF)
+		if (adr > 0x0000_FFFF)
 			op.add1CalcCycle();
 		return bus.getCell((short) adr);
 	};
 	
 	/*
-	public static final GetterBusData RELATIVE = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData RELATIVE = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		short pc = (short) (0x00FF & cpu.getPC());
 		short adr = (short) (pc + cpu.nextPC());//sign use
 		if ((pc & 0xFF00) == (adr & 0xFF00))//same page
@@ -65,15 +67,15 @@ public abstract class BusDataProvider {
 	};
 	*/
 	
-	public static final GetterBusData ZEROPAGE = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ZEROPAGE = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		return bus.getCell((short) (0x00FF & cpu.nextPC()));
 	};
 	
-	public static final GetterBusData ZEROPAGE_X = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ZEROPAGE_X = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		return bus.getCell((short) (Byte.toUnsignedInt(cpu.nextPC()) + Byte.toUnsignedInt(cpu.getX())));
 	};
 	
-	public static final GetterBusData ZEROPAGE_Y = (Opcode2A03 op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ZEROPAGE_Y = (AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
 		return bus.getCell((short) (Byte.toUnsignedInt(cpu.nextPC()) + Byte.toUnsignedInt(cpu.getY())));
 	};
 

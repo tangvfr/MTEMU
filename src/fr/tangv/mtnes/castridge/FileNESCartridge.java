@@ -42,10 +42,10 @@ public class FileNESCartridge extends NESCartridge {
 			this.chrRomSize = nextByte(in) * 8_192;
 			byte flag6 = nextByte(in);
 			//flag6
-			this.mirroringArrangement = (flag6 & 0b0001) < 0;
-			this.persistentMemory = (flag6 & 0b0010) < 0;
-			this.trainer = (flag6 & 0b0100) < 0;
-			this.ignoreMirroringControl = (flag6 & 0b1000) < 0;
+			this.mirroringArrangement = (flag6 & 0b0001) == 0b0001;
+			this.persistentMemory = (flag6 & 0b0010) == 0b0010;
+			this.trainer = (flag6 & 0b0100) == 0b0010;
+			this.ignoreMirroringControl = (flag6 & 0b1000) == 0b1000;
 			this.mapperNumber = (byte) (flag6 >>> 4);
 			
 			//to jump to 0x16

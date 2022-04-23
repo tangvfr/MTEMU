@@ -15,15 +15,18 @@ public class OpcodeADC extends Opcode2A03 {
 		int a = Byte.toUnsignedInt(ac.getData());
 		int m = Byte.toUnsignedInt(mem.getData());
 		int r = a + m + (this.cpu.isSetFlags(Cpu2A03.FLAG_C) ? 1 : 0);
+
+		boolean c7 = (r & 0xFFFF_0000) != 0;
+		final int MASK = 0x0000_8000;
+		boolean a7 = (a & MASK) == MASK;
+		boolean m7 = (m & MASK) == MASK;
+		boolean r7 = (r & MASK) == MASK;
 		
-		int a7 = a & 0x0000_8000;
-		int m7 = m & 0x0000_8000;
-		int r6 = r & 0x0000_4000;
-		r6 = ~(a7 ^ m7) & (m7 ^ r6);
+		boolean v = (!(m7 || a7) && r7) || ((m7 && a7) && !r7);
 		
 		byte out = (byte) r;
 		ac.setData(out);
-		this.setNZCVFlag(out, r > 0x0000_FFFF, r6 > 0);
+		this.setNZCVFlag(out, c7, v);
 	}
 
 }

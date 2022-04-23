@@ -3,13 +3,10 @@ package fr.tangv.mtnes;
 public class Test {
 
 	public static void main(String[] args) {
-		short p1 = 20;
-		byte p2 = -2;
-		byte p3 = 2;
+		int p1 = -7_680;
 		
-		System.out.println(p1);
-		System.out.println(p1 + p2);
-		System.out.println(p1 + p3);
+		System.out.println(Integer.toBinaryString(p1));
+		System.out.println(Integer.toBinaryString((byte) p1));
 		
 	}
 	

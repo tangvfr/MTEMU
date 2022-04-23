@@ -3,11 +3,21 @@ package fr.tangv.mtnes.cpu;
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.cpu.Cpu;
 import fr.tangv.mtnes.bus.Bus2A03;
-import fr.tangv.mtnes.opcode.BusDataProvider;
-import fr.tangv.mtnes.opcode.AbstarctOpcode2A03;
+import fr.tangv.mtnes.opcode.AbstarctOpcode2A03NCC;
 import fr.tangv.mtnes.opcode.BranchOpcode2A03;
+import fr.tangv.mtnes.opcode.BusDataProvider;
 import fr.tangv.mtnes.opcode.OpcodeADC;
 import fr.tangv.mtnes.opcode.OpcodeAND;
+import fr.tangv.mtnes.opcode.OpcodeASL;
+import fr.tangv.mtnes.opcode.OpcodeBIT;
+import fr.tangv.mtnes.opcode.OpcodeBRK;
+import fr.tangv.mtnes.opcode.OpcodeCMP;
+import fr.tangv.mtnes.opcode.OpcodeCPX;
+import fr.tangv.mtnes.opcode.OpcodeCPY;
+import fr.tangv.mtnes.opcode.OpcodeDEC;
+import fr.tangv.mtnes.opcode.OpcodeDEX;
+import fr.tangv.mtnes.opcode.OpcodeDEY;
+import fr.tangv.mtnes.opcode.SetFlagOpcode2A4;
 
 public class Cpu2A03 extends Cpu<Bus2A03> {
 
@@ -17,6 +27,8 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	public static final byte FLAG_Z = 0b0000_0010;
 	/*Flag Interrupt (IRQ disable)*/
 	public static final byte FLAG_I = 0b0000_0100;
+	/*Flag Decimal mode, Dont work*/
+	public static final byte FLAG_D = 0b0000_1000;
 	/*Flag Break*/
 	public static final byte FLAG_B = 0b0001_0000;
 	/*Flag Overflow*/
@@ -25,12 +37,15 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	public static final byte FLAG_N = (byte) 0b1000_0000;
 	
 	//interuption address
-	public static final short NMI = (short) 0xFFFA;
-	public static final short RES = (short) 0xFFFC;
-	public static final short IRQ = (short) 0xFFFE;
+	public static final short NMI_ADR_LOW = (short) 0xFFFA;
+	public static final short NMI_ADR_HIGH = (short) 0xFFFB;
+	public static final short RES_ADR_LOW = (short) 0xFFFC;
+	public static final short RES_ADR_HIGH = (short) 0xFFFD;
+	public static final short IRQ_ADR_LOW = (short) 0xFFFE;
+	public static final short IRQ_ADR_HIGH = (short) 0xFFFF;
 	
 	//registre
-	private AbstarctOpcode2A03[] opcodes;
+	private AbstarctOpcode2A03NCC[] opcodes;
 	/*PC	program counter	(16 bit)*/
 	private short pc;
 	/*AC	accumulator	(8 bit)*/
@@ -49,7 +64,7 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		super("Ricoh 2A03", bus);
 		this.ac = new BusData<Byte>((byte) 0);
 		reset();
-		this.opcodes = new AbstarctOpcode2A03[0xFF];
+		this.opcodes = new AbstarctOpcode2A03NCC[0xFF];
 		//opcodes
 		//ADC
 		new OpcodeADC(this, BusDataProvider.IMMEDIATE, (byte) 0x69, 2);
@@ -70,24 +85,74 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		new OpcodeAND(this, BusDataProvider.INDIRECT_X, (byte) 0x21, 6);
 		new OpcodeAND(this, BusDataProvider.INDIRECT_Y, (byte) 0x31, 5);
 		//ASL
-		new OpcodeAND(this, BusDataProvider.ACCUMULATOR, (byte) 0x0A, 2);
-		new OpcodeAND(this, BusDataProvider.ZEROPAGE, (byte) 0x06, 5);
-		new OpcodeAND(this, BusDataProvider.ZEROPAGE_X, (byte) 0x16, 6);
-		new OpcodeAND(this, BusDataProvider.ABSOLUTE, (byte) 0x0E, 6);
-		new OpcodeAND(this, BusDataProvider.ABSOLUTE_X, (byte) 0x1E, 7);
+		new OpcodeASL(this, BusDataProvider.ACCUMULATOR, (byte) 0x0A, 2);
+		new OpcodeASL(this, BusDataProvider.ZEROPAGE, (byte) 0x06, 5);
+		new OpcodeASL(this, BusDataProvider.ZEROPAGE_X, (byte) 0x16, 6);
+		new OpcodeASL(this, BusDataProvider.ABSOLUTE, (byte) 0x0E, 6);
+		new OpcodeASL(this, BusDataProvider.ABSOLUTE_X, (byte) 0x1E, 7);
 		//BCC
-		new BranchOpcode2A03(this, FLAG_C, false, (byte) 0x90, 2);
+		new BranchOpcode2A03(this, Cpu2A03.FLAG_C, false, (byte) 0x90, 2);
 		//BCS
-		new BranchOpcode2A03(this, FLAG_C, true, (byte) 0xB0, 2);
+		new BranchOpcode2A03(this, Cpu2A03.FLAG_C, true, (byte) 0xB0, 2);
 		//BEQ
-		new BranchOpcode2A03(this, FLAG_Z, true, (byte) 0xF0, 2);
+		new BranchOpcode2A03(this, Cpu2A03.FLAG_Z, true, (byte) 0xF0, 2);
 		//BIT
+		new OpcodeBIT(this, BusDataProvider.ZEROPAGE, (byte) 0x24, 3);
+		new OpcodeBIT(this, BusDataProvider.ABSOLUTE, (byte) 0x2C, 4);
+		//BMI
+		new BranchOpcode2A03(this, Cpu2A03.FLAG_N, true, (byte) 0x30, 2);
+		//BNE
+		new BranchOpcode2A03(this, Cpu2A03.FLAG_Z, false, (byte) 0xD0, 2);
+		//BPL
+		new BranchOpcode2A03(this, Cpu2A03.FLAG_N, false, (byte) 0x10, 2);
+		//BRK
+		new OpcodeBRK(this, (byte) 0x00, 7);
+		//BVC
+		new BranchOpcode2A03(this, Cpu2A03.FLAG_V, false, (byte) 0x50, 2);
+		//BVS
+		new BranchOpcode2A03(this, Cpu2A03.FLAG_V, true, (byte) 0x70, 2);
+		//CLC
+		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_C, false, (byte) 0x18, 2);
+		//CLD
+		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_D, false, (byte) 0xD8, 2);
+		//CLI
+		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_I, false, (byte) 0x58, 2);
+		//CLV
+		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_V, false, (byte) 0xB8, 2);
+		//CMP
+		new OpcodeCMP(this, BusDataProvider.IMMEDIATE, (byte) 0xC9, 2);
+		new OpcodeCMP(this, BusDataProvider.ZEROPAGE, (byte) 0xC5, 3);
+		new OpcodeCMP(this, BusDataProvider.ZEROPAGE_X, (byte) 0xD5, 4);
+		new OpcodeCMP(this, BusDataProvider.ABSOLUTE, (byte) 0xCD, 4);
+		new OpcodeCMP(this, BusDataProvider.ABSOLUTE_X, (byte) 0xDD, 4);
+		new OpcodeCMP(this, BusDataProvider.ABSOLUTE_Y, (byte) 0xD9, 4);
+		new OpcodeCMP(this, BusDataProvider.INDIRECT_X, (byte) 0xC1, 6);
+		new OpcodeCMP(this, BusDataProvider.INDIRECT_Y, (byte) 0xD1, 5);
+		//CPX
+		new OpcodeCPX(this, BusDataProvider.IMMEDIATE, (byte) 0xE0, 2);
+		new OpcodeCPX(this, BusDataProvider.ZEROPAGE, (byte) 0xE4, 3);
+		new OpcodeCPX(this, BusDataProvider.ABSOLUTE, (byte) 0xEC, 4);
+		//CPY
+		new OpcodeCPY(this, BusDataProvider.IMMEDIATE, (byte) 0xC0, 2);
+		new OpcodeCPY(this, BusDataProvider.ZEROPAGE, (byte) 0xC4, 3);
+		new OpcodeCPY(this, BusDataProvider.ABSOLUTE, (byte) 0xCC, 4);
+		//DEC
+		new OpcodeDEC(this, BusDataProvider.ZEROPAGE, (byte) 0xC6, 5);
+		new OpcodeDEC(this, BusDataProvider.ZEROPAGE_X, (byte) 0xD6, 6);
+		new OpcodeDEC(this, BusDataProvider.ABSOLUTE, (byte) 0xCE, 6);
+		new OpcodeDEC(this, BusDataProvider.ABSOLUTE_X, (byte) 0xDE, 7);
+		//DEX
+		new OpcodeDEX(this, (byte) 0xCA, 2);
+		//DEY
+		new OpcodeDEY(this, (byte) 0x88, 2);
+		//EOR
+		
 		
 		//new Opcode(this, BusDataProvider., (byte) 0x, );
 	}
 	
 	
-	public void setOpcode(AbstarctOpcode2A03 opcode) {
+	public void setOpcode(AbstarctOpcode2A03NCC opcode) {
 		int adr = Byte.toUnsignedInt(opcode.getCode());
 		if (this.opcodes[adr] != null)
 			throw new IllegalArgumentException("Opcode with code " + Integer.toHexString(adr) + " is already set !");
@@ -115,16 +180,28 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		return data;
 	}
 	
-	public void addPC(byte add) {
-		this.pc += add;// /!\ add signed, signed calc
-	}
-	
 	public void setPC(short pc) {
 		this.pc = pc;
 	}
 	
+	public void addPC(byte b) {//signed byte
+		this.pc += b;
+	}
+	
 	public short getPC() {
 		return this.pc;
+	}
+	
+	public void setPC(byte low, byte high) {
+		this.pc = ((short) (low | (high << 8)));
+	}
+	
+	public byte getPCLow() {
+		return (byte) (this.pc & 0x00FF);
+	}
+	
+	public byte getPCHigh() {
+		return (byte) ((this.pc >>> 8) & 0x00FF);
 	}
 	
 	public Byte stackPull() {

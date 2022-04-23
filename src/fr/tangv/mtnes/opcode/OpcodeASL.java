@@ -14,7 +14,7 @@ public class OpcodeASL extends Opcode2A03NCC {
 		int r = mem.getData() << 1;
 		byte out = (byte) r;
 		mem.setData(out);
-		this.setNZCFlag(out, r > 0x0000_FFFF);
+		this.setNZCFlag(out, (r & 0xFFFF_0000) != 0);
 	}
 
 }
