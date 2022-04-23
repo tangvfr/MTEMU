@@ -197,7 +197,13 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		new OpcodeORA(this, BusDataProvider.INDIRECT_X, (byte) 0x01, 6);
 		new OpcodeORA(this, BusDataProvider.INDIRECT_Y, (byte) 0x11, 5);
 		//PHA
-		
+		new OpcodePHA(this, (byte) 0x48, 3);
+		//PHP
+		new OpcodePHA(this, (byte) 0x08, 3);
+		//PLA
+		new OpcodePHA(this, (byte) 0x68, 4);
+		//PLP
+		new OpcodePHA(this, (byte) 0x28, 4);
 		
 		
 		//new Opcode(this, BusDataProvider., (byte) 0x, );
