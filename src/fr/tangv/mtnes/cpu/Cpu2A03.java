@@ -204,8 +204,21 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		new OpcodePHA(this, (byte) 0x68, 4);
 		//PLP
 		new OpcodePHA(this, (byte) 0x28, 4);
+		//ROL
+		new OpcodeROL(this, BusDataProvider.ACCUMULATOR, (byte) 0x2A, 2);
+		new OpcodeROL(this, BusDataProvider.ZEROPAGE, (byte) 0x26, 5);
+		new OpcodeROL(this, BusDataProvider.ZEROPAGE_X, (byte) 0x36, 6);
+		new OpcodeROL(this, BusDataProvider.ABSOLUTE, (byte) 0x2E, 6);
+		new OpcodeROL(this, BusDataProvider.ABSOLUTE_X, (byte) 0x3E, 7);
+		//ROR
+		new OpcodeROR(this, BusDataProvider.ACCUMULATOR, (byte) 0x6A, 2);
+		new OpcodeROR(this, BusDataProvider.ZEROPAGE, (byte) 0x66, 5);
+		new OpcodeROR(this, BusDataProvider.ZEROPAGE_X, (byte) 0x76, 6);
+		new OpcodeROR(this, BusDataProvider.ABSOLUTE, (byte) 0x6E, 6);
+		new OpcodeROR(this, BusDataProvider.ABSOLUTE_X, (byte) 0x7E, 7);
+		//RTI
 		
-		
+				
 		//new Opcode(this, BusDataProvider., (byte) 0x, );
 	}
 	
