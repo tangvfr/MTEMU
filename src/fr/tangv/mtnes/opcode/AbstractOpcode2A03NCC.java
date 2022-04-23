@@ -3,11 +3,10 @@ package fr.tangv.mtnes.opcode;
 import fr.tangv.mtemu.opcode.Opcode;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 
-public abstract class AbstarctOpcode2A03NCC implements Opcode<Cpu2A03, Byte> {
+public abstract class AbstractOpcode2A03NCC implements Opcode<Cpu2A03, Byte> {
 
 	public static final byte FLAGS_ZN = (byte) (Cpu2A03.FLAG_Z | Cpu2A03.FLAG_N);
 	public static final byte FLAGS_ZNC = (byte) (Cpu2A03.FLAG_Z | Cpu2A03.FLAG_N | Cpu2A03.FLAG_C);
-	public static final byte FLAGS_ZC = (byte) (Cpu2A03.FLAG_Z | Cpu2A03.FLAG_C);
 	public static final byte FLAGS_ZNCV = (byte) (Cpu2A03.FLAG_Z | Cpu2A03.FLAG_N | Cpu2A03.FLAG_C | Cpu2A03.FLAG_V);
 	
 	protected final Cpu2A03 cpu;
@@ -15,7 +14,7 @@ public abstract class AbstarctOpcode2A03NCC implements Opcode<Cpu2A03, Byte> {
 	private final int cycle;
 	private boolean chPC = false;
 	
-	public AbstarctOpcode2A03NCC(Cpu2A03 cpu, Byte code, int cycle) {
+	public AbstractOpcode2A03NCC(Cpu2A03 cpu, Byte code, int cycle) {
 		if (cpu == null)
 			throw new IllegalArgumentException("Cpu is NULL !");
 		if (code == null)
@@ -48,7 +47,7 @@ public abstract class AbstarctOpcode2A03NCC implements Opcode<Cpu2A03, Byte> {
 		if (data == 0)
 			sr |= Cpu2A03.FLAG_Z;
 		sr |= (data & 0b1000_0000);
-		this.cpu.setFlags(AbstarctOpcode2A03NCC.FLAGS_ZN, sr);
+		this.cpu.setFlags(AbstractOpcode2A03NCC.FLAGS_ZN, sr);
 	}
 	
 	public void setNZCFlag(Byte data, boolean c) {
@@ -58,7 +57,7 @@ public abstract class AbstarctOpcode2A03NCC implements Opcode<Cpu2A03, Byte> {
 		sr |= (data & 0b1000_0000);
 		if (c)
 			sr |= Cpu2A03.FLAG_C;
-		this.cpu.setFlags(AbstarctOpcode2A03NCC.FLAGS_ZNC, sr);
+		this.cpu.setFlags(AbstractOpcode2A03NCC.FLAGS_ZNC, sr);
 	}
 	
 	public void setNZCVFlag(Byte data, boolean c, boolean v) {
@@ -70,7 +69,7 @@ public abstract class AbstarctOpcode2A03NCC implements Opcode<Cpu2A03, Byte> {
 			sr |= Cpu2A03.FLAG_C;
 		if (v)
 			sr |= Cpu2A03.FLAG_V;
-		this.cpu.setFlags(AbstarctOpcode2A03NCC.FLAGS_ZNCV, sr);
+		this.cpu.setFlags(AbstractOpcode2A03NCC.FLAGS_ZNCV, sr);
 	}
 	
 	@Override

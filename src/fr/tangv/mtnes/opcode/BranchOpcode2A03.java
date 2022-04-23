@@ -2,7 +2,7 @@ package fr.tangv.mtnes.opcode;
 
 import fr.tangv.mtnes.cpu.Cpu2A03;
 
-public class BranchOpcode2A03 extends AbstarctOpcode2A03 {
+public class BranchOpcode2A03 extends AbstractOpcode2A03 {
 
 	private byte flag;
 	private boolean value;

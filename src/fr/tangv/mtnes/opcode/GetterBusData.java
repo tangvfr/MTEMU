@@ -7,6 +7,6 @@ import fr.tangv.mtnes.cpu.Cpu2A03;
 @FunctionalInterface
 public interface GetterBusData {
 
-	public BusData<Byte> getBusData(AbstarctOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus);
+	public BusData<Byte> getBusData(AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus);
 	
 }

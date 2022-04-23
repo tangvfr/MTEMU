@@ -3,7 +3,7 @@ package fr.tangv.mtnes.opcode;
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 
-public abstract class Opcode2A03NCC extends AbstarctOpcode2A03NCC {
+public abstract class Opcode2A03NCC extends AbstractOpcode2A03NCC {
 	
 	private final GetterBusData getter;
 	
