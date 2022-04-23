@@ -6,22 +6,22 @@ import fr.tangv.mtnes.bus.Bus2A03;
 import fr.tangv.mtnes.opcode.AbstarctOpcode2A03NCC;
 import fr.tangv.mtnes.opcode.BranchOpcode2A03;
 import fr.tangv.mtnes.opcode.BusDataProvider;
-import fr.tangv.mtnes.opcode.OpcodeADC;
-import fr.tangv.mtnes.opcode.OpcodeAND;
-import fr.tangv.mtnes.opcode.OpcodeASL;
-import fr.tangv.mtnes.opcode.OpcodeBIT;
-import fr.tangv.mtnes.opcode.OpcodeBRK;
-import fr.tangv.mtnes.opcode.OpcodeCMP;
-import fr.tangv.mtnes.opcode.OpcodeCPX;
-import fr.tangv.mtnes.opcode.OpcodeCPY;
-import fr.tangv.mtnes.opcode.OpcodeDEC;
-import fr.tangv.mtnes.opcode.OpcodeDEX;
-import fr.tangv.mtnes.opcode.OpcodeDEY;
-import fr.tangv.mtnes.opcode.OpcodeEOR;
-import fr.tangv.mtnes.opcode.OpcodeINC;
-import fr.tangv.mtnes.opcode.OpcodeINX;
-import fr.tangv.mtnes.opcode.OpcodeINY;
 import fr.tangv.mtnes.opcode.SetFlagOpcode2A4;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeADC;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeAND;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeASL;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeBIT;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeBRK;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeCMP;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeCPX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeCPY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeDEC;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeDEX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeDEY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeEOR;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeINC;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeINX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeINY;
 
 public class Cpu2A03 extends Cpu<Bus2A03> {
 

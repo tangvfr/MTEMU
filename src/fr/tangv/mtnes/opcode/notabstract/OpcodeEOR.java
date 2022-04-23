@@ -1,7 +1,9 @@
-package fr.tangv.mtnes.opcode;
+package fr.tangv.mtnes.opcode.notabstract;
 
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtnes.cpu.Cpu2A03;
+import fr.tangv.mtnes.opcode.GetterBusData;
+import fr.tangv.mtnes.opcode.Opcode2A03;
 
 public class OpcodeEOR extends Opcode2A03 {
 
