@@ -343,17 +343,21 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	}
 	
 	public Byte stackPull() {
-		sp++;
+		this.sp++;
 		return this.getBus().read((short) (Bus2A03.STACK | sp));
 	}
 	
 	public void stackPush(Byte data) {
 		this.getBus().write((short) (Bus2A03.STACK | sp), data);
-		sp--;
+		this.sp--;
 	}
 	
 	public byte getSP() {
-		return sp;
+		return this.sp;
+	}
+	
+	public void setSP(byte sp) {
+		this.sp = sp;
 	}
 	
 	public BusData<Byte> getAC() {
