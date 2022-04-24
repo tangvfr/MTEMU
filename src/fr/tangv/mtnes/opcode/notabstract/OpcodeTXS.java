@@ -11,7 +11,9 @@ public class OpcodeTXS extends ImpliedOpcode2A03 {
 
 	@Override
 	protected void run() {
-		this.cpu.setSP(this.cpu.getX());
+		byte data = this.cpu.getX();
+		this.cpu.setSP(data);
+		this.setNZFlag(data);
 	}
 
 }

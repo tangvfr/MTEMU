@@ -11,7 +11,9 @@ public class OpcodeTXA extends ImpliedOpcode2A03 {
 
 	@Override
 	protected void run() {
-		this.cpu.getAC().setData(this.cpu.getX());
+		byte data = this.cpu.getX();
+		this.cpu.getAC().setData(data);
+		this.setNZFlag(data);
 	}
 
 }

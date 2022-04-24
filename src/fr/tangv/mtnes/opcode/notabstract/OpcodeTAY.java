@@ -11,7 +11,9 @@ public class OpcodeTAY extends ImpliedOpcode2A03 {
 
 	@Override
 	protected void run() {
-		this.cpu.setY(this.cpu.getAC().getData());
+		byte data = this.cpu.getAC().getData();
+		this.cpu.setY(data);
+		this.setNZFlag(data);
 	}
 
 }

@@ -11,7 +11,9 @@ public class OpcodeTSX extends ImpliedOpcode2A03 {
 
 	@Override
 	protected void run() {
-		this.cpu.setX(this.cpu.getSP());
+		byte data = this.cpu.getSP();
+		this.cpu.setX(data);
+		this.setNZFlag(data);
 	}
 
 }

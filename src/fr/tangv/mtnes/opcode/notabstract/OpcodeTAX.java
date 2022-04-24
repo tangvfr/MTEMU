@@ -11,7 +11,9 @@ public class OpcodeTAX extends ImpliedOpcode2A03 {
 
 	@Override
 	protected void run() {
-		this.cpu.setX(this.cpu.getAC().getData());
+		byte data = this.cpu.getAC().getData();
+		this.cpu.setX(data);
+		this.setNZFlag(data);
 	}
 
 }
