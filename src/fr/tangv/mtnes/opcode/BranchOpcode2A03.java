@@ -20,7 +20,7 @@ public class BranchOpcode2A03 extends AbstractOpcode2A03 {
 		if (this.cpu.isSetFlags(flag) == value) {
 			//calc relative
 			short pc = (short) (0x00FF & cpu.getPC());
-			short adr = (short) (pc + cpu.nextPC());//sign use
+			short adr = (short) (pc + cpu.addGetPC());//sign use
 			if ((pc & 0xFF00) == (adr & 0xFF00))//same page
 				this.add1CalcCycle();
 			else

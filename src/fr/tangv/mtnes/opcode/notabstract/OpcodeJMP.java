@@ -12,8 +12,8 @@ public class OpcodeJMP extends ImpliedOpcode2A03 {
 
 	@Override
 	protected void run() {
-		byte pcl = this.cpu.nextPC();
-		byte pch = this.cpu.nextPC();
+		byte pcl = this.cpu.addGetPC();
+		byte pch = this.cpu.addGetPC();
 		this.cpu.setPC(pcl, pch);
 	}
 

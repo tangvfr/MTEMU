@@ -13,8 +13,8 @@ public class OpcodeBRK extends ImpliedOpcode2A03 {
 	@Override
 	protected void run() {
 		this.cpu.addPC((byte) 2);
-		this.cpu.stackPush(this.cpu.getPCHigh());
 		this.cpu.stackPush(this.cpu.getPCLow());
+		this.cpu.stackPush(this.cpu.getPCHigh());
 		this.cpu.stackPush((byte) (this.getCpu().getSR() | 0b0011_0000));
 		this.cpu.setFlags(Cpu2A03.FLAG_I);
 	}

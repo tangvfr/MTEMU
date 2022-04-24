@@ -5,9 +5,9 @@ import fr.tangv.mtnes.cpu.Cpu2A03;
 import fr.tangv.mtnes.opcode.GetterBusData;
 import fr.tangv.mtnes.opcode.Opcode2A03;
 
-public class OpcodeADC extends Opcode2A03 {
+public class OpcodeSBC extends Opcode2A03 {
 
-	public OpcodeADC(Cpu2A03 cpu, GetterBusData getter, Byte code, int cycle) {
+	public OpcodeSBC(Cpu2A03 cpu, GetterBusData getter, Byte code, int cycle) {
 		super(cpu, getter, code, cycle);
 	}
 
@@ -16,7 +16,7 @@ public class OpcodeADC extends Opcode2A03 {
 		BusData<Byte> ac = this.cpu.getAC();
 		int a = Byte.toUnsignedInt(ac.getData());
 		int m = Byte.toUnsignedInt(mem.getData());
-		int r = a + m + (this.cpu.isSetFlags(Cpu2A03.FLAG_C) ? 1 : 0);
+		int r = a + (0xFF - m) + (this.cpu.isSetFlags(Cpu2A03.FLAG_C) ? 1 : 0);
 
 		boolean c7 = (r & 0xFFFF_0000) != 0;
 		final int MASK = 0x0000_8000;
@@ -24,7 +24,7 @@ public class OpcodeADC extends Opcode2A03 {
 		boolean m7 = (m & MASK) == MASK;
 		boolean r7 = (r & MASK) == MASK;
 		
-		boolean v = (!m7 && !a7 && r7) || (m7 && a7 && !r7);
+		boolean v = (!m7 && a7 && r7) || (m7 && !a7 && !r7);
 		
 		byte out = (byte) r;
 		ac.setData(out);

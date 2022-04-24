@@ -4,21 +4,22 @@ import fr.tangv.mtnes.bus.Bus2A03;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 import fr.tangv.mtnes.opcode.ImpliedOpcode2A03;
 
-public class OpcodeJMPI extends ImpliedOpcode2A03 {
-	
-	public OpcodeJMPI(Cpu2A03 cpu, Byte code, int cycle) {
+public class OpcodeRTS extends ImpliedOpcode2A03 {
+
+	public OpcodeRTS(Cpu2A03 cpu, Byte code, int cycle) {
 		super(cpu, code, cycle);
-		this.setChangePC();
+		super.setChangePC();
 	}
 
 	@Override
 	protected void run() {
 		Bus2A03 bus = this.cpu.getBus();
-		short adr = (short) (cpu.addGetPC() | (cpu.addGetPC() << 8));
+		short adr = (short) (this.cpu.stackPull() | (this.cpu.stackPull() << 8));
 		byte pcl = bus.getCell(adr).getData();
 		adr++;
 		byte pch = bus.getCell(adr).getData();
 		this.cpu.setPC(pcl, pch);
+		this.cpu.addPC((byte) 1);
 	}
 
 }
