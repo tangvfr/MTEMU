@@ -1,6 +1,7 @@
 package fr.tangv.mtnes.opcode;
 
 import fr.tangv.mtemu.bus.BusData;
+import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 
 public abstract class Opcode2A03NCC extends AbstractOpcode2A03NCC {
@@ -15,10 +16,10 @@ public abstract class Opcode2A03NCC extends AbstractOpcode2A03NCC {
 		this.getter = getter;
 	}
 	
-	protected abstract void run(BusData<Byte> mem);
+	protected abstract void run(BusData<Byte> mem) throws BusIOException;
 	
 	@Override
-	public int execute() {
+	public int execute() throws BusIOException {
 		this.run(getter.getBusData(this, this.cpu, this.cpu.getBus()));
 		return this.getCycle();
 	}

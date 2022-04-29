@@ -1,20 +1,16 @@
 package fr.tangv.mtemu.bus;
 
-public class BusData<T extends Number> {
+public abstract class BusData<T extends Number> {
 
-	private T data;
+	protected T data;
 	
 	public BusData(T data) {
 		this.data = data;
 	}
 	
-	public T getData() {
-		return this.data;
-	}
+	public abstract T getData() throws BusIOException;
 	
-	public void setData(T data) {
-		this.data = data;
-	}
+	public abstract void setData(T data) throws BusIOException;
 
 	@Override
 	public String toString() {

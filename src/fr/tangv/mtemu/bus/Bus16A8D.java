@@ -12,12 +12,12 @@ public class Bus16A8D implements Bus<Short, Byte> {
 	}
 	
 	@Override
-	public Byte read(Short adr) {
+	public Byte read(Short adr) throws BusIOException {
 		return this.data[Short.toUnsignedInt(adr)].getData();
 	}
 	
 	@Override
-	public void write(Short adr, Byte data) {
+	public void write(Short adr, Byte data) throws BusIOException {
 		this.data[Short.toUnsignedInt(adr)].setData(data);
 	}
 	

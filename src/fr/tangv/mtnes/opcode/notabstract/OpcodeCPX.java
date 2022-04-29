@@ -1,6 +1,7 @@
 package fr.tangv.mtnes.opcode.notabstract;
 
 import fr.tangv.mtemu.bus.BusData;
+import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 import fr.tangv.mtnes.opcode.GetterBusData;
 import fr.tangv.mtnes.opcode.Opcode2A03;
@@ -12,7 +13,7 @@ public class OpcodeCPX extends Opcode2A03 {
 	}
 
 	@Override
-	protected void run(BusData<Byte> mem) {
+	protected void run(BusData<Byte> mem) throws BusIOException {
 		int x = Byte.toUnsignedInt(this.cpu.getX());
 		int m = Byte.toUnsignedInt(mem.getData());
 		int r = x - m;

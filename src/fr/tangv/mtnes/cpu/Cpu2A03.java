@@ -1,13 +1,53 @@
 package fr.tangv.mtnes.cpu;
 
 import fr.tangv.mtemu.bus.BusData;
+import fr.tangv.mtemu.bus.BusDataRW;
+import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtemu.cpu.Cpu;
 import fr.tangv.mtnes.bus.Bus2A03;
 import fr.tangv.mtnes.opcode.AbstractOpcode2A03NCC;
 import fr.tangv.mtnes.opcode.BranchOpcode2A03;
 import fr.tangv.mtnes.opcode.BusDataProvider;
 import fr.tangv.mtnes.opcode.SetFlagOpcode2A4;
-import fr.tangv.mtnes.opcode.notabstract.*;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeADC;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeAND;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeASL;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeBIT;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeBRK;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeCMP;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeCPX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeCPY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeDEC;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeDEX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeDEY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeEOR;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeINC;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeINX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeINY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeJMP;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeJMPI;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeJSR;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeLDA;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeLDX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeLDY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeLSR;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeNOP;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeORA;
+import fr.tangv.mtnes.opcode.notabstract.OpcodePHA;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeROL;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeROR;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeRTI;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeRTS;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeSBC;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeSTA;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeSTX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeSTY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeTAX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeTAY;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeTSX;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeTXA;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeTXS;
+import fr.tangv.mtnes.opcode.notabstract.OpcodeTYA;
 
 public class Cpu2A03 extends Cpu<Bus2A03> {
 
@@ -26,13 +66,10 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	/*Flag Negative*/
 	public static final byte FLAG_N = (byte) 0b1000_0000;
 	
-	//interuption address
-	public static final short NMI_ADR_LOW = (short) 0xFFFA;
-	public static final short NMI_ADR_HIGH = (short) 0xFFFB;
-	public static final short RES_ADR_LOW = (short) 0xFFFC;
-	public static final short RES_ADR_HIGH = (short) 0xFFFD;
-	public static final short IRQ_ADR_LOW = (short) 0xFFFE;
-	public static final short IRQ_ADR_HIGH = (short) 0xFFFF;
+	//interupt address
+	public static final short NMI_ADR = (short) 0xFFFA;
+	public static final short RES_ADR = (short) 0xFFFC;
+	public static final short IRQ_ADR = (short) 0xFFFE;
 	
 	//registre
 	private AbstractOpcode2A03NCC[] opcodes;
@@ -52,11 +89,11 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	
 	public Cpu2A03(Bus2A03 bus) {
 		super("Ricoh 2A03", bus);
-		this.ac = new BusData<Byte>((byte) 0);
+		this.ac = new BusDataRW<Byte>((byte) 0);
 		this.x = 0;
 		this.y = 0;
 		this.sp = (byte) 0xFF;
-		this.sr = 0;
+		this.sr = (byte) 0b0100_0000;
 		this.opcodes = new AbstractOpcode2A03NCC[0xFF];
 		//opcodes
 		//ADC
@@ -275,27 +312,42 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		this.opcodes[adr] = opcode;
 	}
 	
-	private int interupt(short adr) {
-		/*Bus2A03 bus = this.getBus();
+	private int interupt(short adr) throws BusIOException {
+		//save adr & pc
+		this.stackPush(this.getPCLow());
+		this.stackPush(this.getPCHigh());
+		this.stackPush((byte) (this.getSR() | 0b0011_0000));
+		//set new adr
+		Bus2A03 bus = this.getBus();
 		byte pcl = bus.getCell(adr).getData();
 		adr++;
 		byte pch = bus.getCell(adr).getData();
-		this.setPC(pcl, pch);*/
+		this.setPC(pcl, pch);
+		return 7;
 	}
 	
-	public int res() {
-		
+	public int interuptIRQ() throws BusIOException {
+		return this.interupt(Cpu2A03.IRQ_ADR);
 	}
 	
-	public Byte addGetPC() {
+	public int interuptNMI() throws BusIOException {
+		return this.interupt(Cpu2A03.NMI_ADR);
+	}
+	
+	public int interuptRES() throws BusIOException {
+		short adr = Cpu2A03.RES_ADR;
+		//set new adr
+		Bus2A03 bus = this.getBus();
+		byte pcl = bus.getCell(adr).getData();
+		adr++;
+		byte pch = bus.getCell(adr).getData();
+		this.setPC(pcl, pch);
+		return 7;
+	}
+	
+	public Byte addGetPC()throws BusIOException {
 		pc++;
 		Byte data = this.getBus().read(pc);
-		return data;
-	}
-	
-	public BusData<Byte> nextCellPC() {
-		BusData<Byte> data = this.getBus().getCell(pc);
-		pc++;
 		return data;
 	}
 	
@@ -323,12 +375,12 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		return (byte) ((this.pc >>> 8) & 0x00FF);
 	}
 	
-	public Byte stackPull() {
+	public Byte stackPull() throws BusIOException {
 		this.sp++;
 		return this.getBus().read((short) (Bus2A03.STACK | sp));
 	}
 	
-	public void stackPush(Byte data) {
+	public void stackPush(Byte data) throws BusIOException {
 		this.getBus().write((short) (Bus2A03.STACK | sp), data);
 		this.sp--;
 	}

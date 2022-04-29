@@ -1,6 +1,7 @@
 package fr.tangv.mtnes.opcode.notabstract;
 
 import fr.tangv.mtemu.bus.BusData;
+import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 import fr.tangv.mtnes.opcode.GetterBusData;
 import fr.tangv.mtnes.opcode.Opcode2A03NCC;
@@ -14,7 +15,7 @@ public class OpcodeBIT extends Opcode2A03NCC {
 	}
 
 	@Override
-	protected void run(BusData<Byte> mem) {
+	protected void run(BusData<Byte> mem) throws BusIOException {
 		byte m = mem.getData();
 		byte r = (byte) (this.cpu.getAC().getData() & m);
 		byte sr = 0;

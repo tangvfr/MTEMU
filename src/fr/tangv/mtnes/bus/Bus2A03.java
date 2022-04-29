@@ -16,15 +16,10 @@ public class Bus2A03 extends Bus16A8D {
 	public static final short PPU = 0x2000;
 	public static final short MIRRORS_PPU = 0x2008;
 	public static final short APU = 0x4000;
-	public static final short JOYPAD = 0x4016;
 	public static final short JOYPAD1 = 0x4016;
 	public static final short JOYPAD2 = 0x4017;
-	public static final short U_JOYPAD3 = 0x4018;
-	public static final short U_JOYPAD4 = 0x4019;
-	//Optional
-	public static final short EXPANSION_ROM = 0x4020;
-	public static final short S_RAM = 0x6000;
-	//PRG ROM
+	//Castridge
+	public static final short CASTRIDGE = 0x4018;//none without mapper
 	public static final short PRG_ROM_LOW = (short) 0x8000;
 	public static final short PRG_ROM_HIGH = (short) 0xC000;
 	//MAX

@@ -1,5 +1,6 @@
 package fr.tangv.mtnes.opcode;
 
+import fr.tangv.mtemu.bus.BusDataR;
 import fr.tangv.mtnes.bus.Bus2A03;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 
@@ -28,7 +29,7 @@ public abstract class BusDataProvider {
 	};
 	
 	public static final GetterBusData IMMEDIATE = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
-		return cpu.nextCellPC();
+		return new BusDataR<Byte>(cpu.addGetPC());
 	};
 	
 	/*

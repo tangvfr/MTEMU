@@ -1,5 +1,6 @@
 package fr.tangv.mtnes.opcode;
 
+import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 
 public class BranchOpcode2A03 extends AbstractOpcode2A03 {
@@ -14,7 +15,7 @@ public class BranchOpcode2A03 extends AbstractOpcode2A03 {
 	}
 	
 	@Override
-	public int execute() {
+	public int execute() throws BusIOException {
 		this.resetCalcCycle();
 		
 		if (this.cpu.isSetFlags(flag) == value) {

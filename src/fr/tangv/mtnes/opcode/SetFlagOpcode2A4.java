@@ -1,5 +1,6 @@
 package fr.tangv.mtnes.opcode;
 
+import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtnes.cpu.Cpu2A03;
 
 public class SetFlagOpcode2A4 extends ImpliedOpcode2A03 {
@@ -18,7 +19,7 @@ public class SetFlagOpcode2A4 extends ImpliedOpcode2A03 {
 	}
 	
 	@Override
-	protected void run() {
+	protected void run() throws BusIOException {
 		this.cpu.setFlags(flag, value);
 	}
 
