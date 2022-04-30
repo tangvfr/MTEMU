@@ -1,14 +1,14 @@
 package fr.tangv.mtnes.opcode;
 
 import fr.tangv.mtemu.bus.BusIOException;
-import fr.tangv.mtnes.cpu.Cpu2A03;
+import fr.tangv.mtnes.processor.NesCpu;
 
 public class SetFlagOpcode2A4 extends ImpliedOpcode2A03 {
 
 	private byte flag;
 	private byte value;
 	
-	public SetFlagOpcode2A4(Cpu2A03 cpu, byte flag, boolean value, Byte code, int cycle) {
+	public SetFlagOpcode2A4(NesCpu cpu, byte flag, boolean value, Byte code, int cycle) {
 		super(cpu, code, cycle);
 		this.flag = flag;
 		if (!value) {

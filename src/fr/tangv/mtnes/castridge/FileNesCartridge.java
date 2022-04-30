@@ -5,13 +5,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import fr.tangv.mtemu.bus.Bus16A8D;
+import fr.tangv.mtemu.comp.Rom16A8D;
 
-public class FileNESCartridge extends NESCartridge {
+public class FileNesCartridge extends NesCartridge {
 
-	private Bus16A8D trainerRom;
-	private Bus16A8D prgRom;
-	private Bus16A8D chrRom;
+	private Rom16A8D trainerRom;
+	private Rom16A8D prgRom;
+	private Rom16A8D chrRom;
 	
 	private int prgRomSize;
 	private int chrRomSize;
@@ -22,21 +22,21 @@ public class FileNESCartridge extends NESCartridge {
 	private byte mapperNumber;
 	
 	
-	public FileNESCartridge(String file) throws IOException {
+	public FileNesCartridge(String file) throws IOException {
 		this(new FileInputStream(file));
 	}
 	
-	public FileNESCartridge(File file) throws IOException {
+	public FileNesCartridge(File file) throws IOException {
 		this(new FileInputStream(file));
 	}
 	
-	public FileNESCartridge(InputStream in) throws IOException {
+	public FileNesCartridge(InputStream in) throws IOException {
 		byte[] head = new byte[4];
 		readBytes(in, head);
-		if (head[0] == NESCartridge.HEAD_FILE[0]
-			&& head[1] == NESCartridge.HEAD_FILE[1]
-			&& head[2] == NESCartridge.HEAD_FILE[2]
-			&& head[3] == NESCartridge.HEAD_FILE[3]
+		if (head[0] == NesCartridge.HEAD_FILE[0]
+			&& head[1] == NesCartridge.HEAD_FILE[1]
+			&& head[2] == NesCartridge.HEAD_FILE[2]
+			&& head[3] == NesCartridge.HEAD_FILE[3]
 			) {
 			this.prgRomSize = nextByte(in) * 16_384;
 			this.chrRomSize = nextByte(in) * 8_192;
@@ -100,17 +100,17 @@ public class FileNESCartridge extends NESCartridge {
 	}
 	
 	@Override
-	public Bus16A8D getPrgRom() {
+	public Rom16A8D getPrgRom() {
 		return this.prgRom;
 	}
 
 	@Override
-	public Bus16A8D getChrRom() {
+	public Rom16A8D getChrRom() {
 		return this.chrRom;
 	}
 
 	@Override
-	public Bus16A8D getTrainerRom() {
+	public Rom16A8D getTrainerRom() {
 		return this.trainerRom;
 	}
 

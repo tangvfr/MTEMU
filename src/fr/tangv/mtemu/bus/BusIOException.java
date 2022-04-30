@@ -8,4 +8,8 @@ public class BusIOException extends Exception {
 		super(msg);
 	}
 	
+	public BusIOException(Throwable t) {
+		super(t);
+	}
+	
 }

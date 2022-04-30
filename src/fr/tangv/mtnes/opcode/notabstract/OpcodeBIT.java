@@ -2,15 +2,15 @@ package fr.tangv.mtnes.opcode.notabstract;
 
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusIOException;
-import fr.tangv.mtnes.cpu.Cpu2A03;
 import fr.tangv.mtnes.opcode.GetterBusData;
 import fr.tangv.mtnes.opcode.Opcode2A03NCC;
+import fr.tangv.mtnes.processor.NesCpu;
 
 public class OpcodeBIT extends Opcode2A03NCC {
 
-	public static final byte FLAGS_NZV = (byte) (Cpu2A03.FLAG_N | Cpu2A03.FLAG_Z | Cpu2A03.FLAG_V);
+	public static final byte FLAGS_NZV = (byte) (NesCpu.FLAG_N | NesCpu.FLAG_Z | NesCpu.FLAG_V);
 	
-	public OpcodeBIT(Cpu2A03 cpu, GetterBusData getter, Byte code, int cycle) {
+	public OpcodeBIT(NesCpu cpu, GetterBusData getter, Byte code, int cycle) {
 		super(cpu, getter, code, cycle);
 	}
 
@@ -21,7 +21,7 @@ public class OpcodeBIT extends Opcode2A03NCC {
 		byte sr = 0;
 		
 		if (r == 0)//FLag Z
-			sr |= Cpu2A03.FLAG_Z;
+			sr |= NesCpu.FLAG_Z;
 		sr |= (m & 0b1100_0000);//Flag N & V
 		
 		this.cpu.setFlags(FLAGS_NZV, sr);

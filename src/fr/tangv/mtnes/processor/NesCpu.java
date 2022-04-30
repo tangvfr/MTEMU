@@ -1,10 +1,10 @@
-package fr.tangv.mtnes.cpu;
+package fr.tangv.mtnes.processor;
 
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusDataRW;
 import fr.tangv.mtemu.bus.BusIOException;
-import fr.tangv.mtemu.cpu.Cpu;
-import fr.tangv.mtnes.bus.Bus2A03;
+import fr.tangv.mtemu.processor.Processor;
+import fr.tangv.mtnes.bus.NesBus;
 import fr.tangv.mtnes.opcode.AbstractOpcode2A03NCC;
 import fr.tangv.mtnes.opcode.BranchOpcode2A03;
 import fr.tangv.mtnes.opcode.BusDataProvider;
@@ -49,7 +49,7 @@ import fr.tangv.mtnes.opcode.notabstract.OpcodeTXA;
 import fr.tangv.mtnes.opcode.notabstract.OpcodeTXS;
 import fr.tangv.mtnes.opcode.notabstract.OpcodeTYA;
 
-public class Cpu2A03 extends Cpu<Bus2A03> {
+public class NesCpu extends Processor<NesBus> {
 
 	/*Flag Carry*/
 	public static final byte FLAG_C = 0b0000_0001;
@@ -87,7 +87,7 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	private byte sr;
 	
 	
-	public Cpu2A03(Bus2A03 bus) {
+	public NesCpu(NesBus bus) {
 		super("Ricoh 2A03", bus);
 		this.ac = new BusDataRW<Byte>((byte) 0);
 		this.x = 0;
@@ -121,34 +121,34 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		new OpcodeASL(this, BusDataProvider.ABSOLUTE, (byte) 0x0E, 6);
 		new OpcodeASL(this, BusDataProvider.ABSOLUTE_X, (byte) 0x1E, 7);
 		//BCC
-		new BranchOpcode2A03(this, Cpu2A03.FLAG_C, false, (byte) 0x90, 2);
+		new BranchOpcode2A03(this, NesCpu.FLAG_C, false, (byte) 0x90, 2);
 		//BCS
-		new BranchOpcode2A03(this, Cpu2A03.FLAG_C, true, (byte) 0xB0, 2);
+		new BranchOpcode2A03(this, NesCpu.FLAG_C, true, (byte) 0xB0, 2);
 		//BEQ
-		new BranchOpcode2A03(this, Cpu2A03.FLAG_Z, true, (byte) 0xF0, 2);
+		new BranchOpcode2A03(this, NesCpu.FLAG_Z, true, (byte) 0xF0, 2);
 		//BIT
 		new OpcodeBIT(this, BusDataProvider.ZEROPAGE, (byte) 0x24, 3);
 		new OpcodeBIT(this, BusDataProvider.ABSOLUTE, (byte) 0x2C, 4);
 		//BMI
-		new BranchOpcode2A03(this, Cpu2A03.FLAG_N, true, (byte) 0x30, 2);
+		new BranchOpcode2A03(this, NesCpu.FLAG_N, true, (byte) 0x30, 2);
 		//BNE
-		new BranchOpcode2A03(this, Cpu2A03.FLAG_Z, false, (byte) 0xD0, 2);
+		new BranchOpcode2A03(this, NesCpu.FLAG_Z, false, (byte) 0xD0, 2);
 		//BPL
-		new BranchOpcode2A03(this, Cpu2A03.FLAG_N, false, (byte) 0x10, 2);
+		new BranchOpcode2A03(this, NesCpu.FLAG_N, false, (byte) 0x10, 2);
 		//BRK
 		new OpcodeBRK(this, (byte) 0x00, 7);
 		//BVC
-		new BranchOpcode2A03(this, Cpu2A03.FLAG_V, false, (byte) 0x50, 2);
+		new BranchOpcode2A03(this, NesCpu.FLAG_V, false, (byte) 0x50, 2);
 		//BVS
-		new BranchOpcode2A03(this, Cpu2A03.FLAG_V, true, (byte) 0x70, 2);
+		new BranchOpcode2A03(this, NesCpu.FLAG_V, true, (byte) 0x70, 2);
 		//CLC
-		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_C, false, (byte) 0x18, 2);
+		new SetFlagOpcode2A4(this, NesCpu.FLAG_C, false, (byte) 0x18, 2);
 		//CLD
-		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_D, false, (byte) 0xD8, 2);
+		new SetFlagOpcode2A4(this, NesCpu.FLAG_D, false, (byte) 0xD8, 2);
 		//CLI
-		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_I, false, (byte) 0x58, 2);
+		new SetFlagOpcode2A4(this, NesCpu.FLAG_I, false, (byte) 0x58, 2);
 		//CLV
-		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_V, false, (byte) 0xB8, 2);
+		new SetFlagOpcode2A4(this, NesCpu.FLAG_V, false, (byte) 0xB8, 2);
 		//CMP
 		new OpcodeCMP(this, BusDataProvider.IMMEDIATE, (byte) 0xC9, 2);
 		new OpcodeCMP(this, BusDataProvider.ZEROPAGE, (byte) 0xC5, 3);
@@ -270,11 +270,11 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		new OpcodeSBC(this, BusDataProvider.INDIRECT_X, (byte) 0xE1, 6);
 		new OpcodeSBC(this, BusDataProvider.INDIRECT_Y, (byte) 0xF1, 5);
 		//SEC
-		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_C, true, (byte) 0x38, 2);
+		new SetFlagOpcode2A4(this, NesCpu.FLAG_C, true, (byte) 0x38, 2);
 		//SED
-		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_D, true, (byte) 0xF8, 2);
+		new SetFlagOpcode2A4(this, NesCpu.FLAG_D, true, (byte) 0xF8, 2);
 		//SEI
-		new SetFlagOpcode2A4(this, Cpu2A03.FLAG_I, true, (byte) 0x78, 2);
+		new SetFlagOpcode2A4(this, NesCpu.FLAG_I, true, (byte) 0x78, 2);
 		//STA
 		new OpcodeSTA(this, BusDataProvider.ZEROPAGE, (byte) 0x85, 3);
 		new OpcodeSTA(this, BusDataProvider.ZEROPAGE_X, (byte) 0x95, 4);
@@ -312,13 +312,30 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 		this.opcodes[adr] = opcode;
 	}
 	
+	@Override
+	public int runCycle() throws BusIOException {
+		int cycles;
+		//check opcode
+		int vop = Byte.toUnsignedInt(this.getBus().read(this.pc));
+		AbstractOpcode2A03NCC op = this.opcodes[vop];
+		if (op == null)
+			throw new BusIOException("Opcode 0x" + Integer.toHexString(vop) + " is illegal !");
+		
+		//execute opcode
+		cycles = op.execute();
+		if (!op.isChangePC())
+			this.pc++;
+		
+		return cycles;
+	}
+	
 	private int interupt(short adr) throws BusIOException {
 		//save adr & pc
 		this.stackPush(this.getPCLow());
 		this.stackPush(this.getPCHigh());
 		this.stackPush((byte) (this.getSR() | 0b0011_0000));
 		//set new adr
-		Bus2A03 bus = this.getBus();
+		NesBus bus = this.getBus();
 		byte pcl = bus.getCell(adr).getData();
 		adr++;
 		byte pch = bus.getCell(adr).getData();
@@ -327,17 +344,17 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	}
 	
 	public int interuptIRQ() throws BusIOException {
-		return this.interupt(Cpu2A03.IRQ_ADR);
+		return this.interupt(NesCpu.IRQ_ADR);
 	}
 	
 	public int interuptNMI() throws BusIOException {
-		return this.interupt(Cpu2A03.NMI_ADR);
+		return this.interupt(NesCpu.NMI_ADR);
 	}
 	
 	public int interuptRES() throws BusIOException {
-		short adr = Cpu2A03.RES_ADR;
+		short adr = NesCpu.RES_ADR;
 		//set new adr
-		Bus2A03 bus = this.getBus();
+		NesBus bus = this.getBus();
 		byte pcl = bus.getCell(adr).getData();
 		adr++;
 		byte pch = bus.getCell(adr).getData();
@@ -346,8 +363,8 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	}
 	
 	public Byte addGetPC()throws BusIOException {
-		pc++;
-		Byte data = this.getBus().read(pc);
+		this.pc++;
+		Byte data = this.getBus().read(this.pc);
 		return data;
 	}
 	
@@ -377,11 +394,11 @@ public class Cpu2A03 extends Cpu<Bus2A03> {
 	
 	public Byte stackPull() throws BusIOException {
 		this.sp++;
-		return this.getBus().read((short) (Bus2A03.STACK | sp));
+		return this.getBus().read((short) (NesBus.STACK | sp));
 	}
 	
 	public void stackPush(Byte data) throws BusIOException {
-		this.getBus().write((short) (Bus2A03.STACK | sp), data);
+		this.getBus().write((short) (NesBus.STACK | sp), data);
 		this.sp--;
 	}
 	

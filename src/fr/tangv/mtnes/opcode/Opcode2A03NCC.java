@@ -2,13 +2,13 @@ package fr.tangv.mtnes.opcode;
 
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusIOException;
-import fr.tangv.mtnes.cpu.Cpu2A03;
+import fr.tangv.mtnes.processor.NesCpu;
 
 public abstract class Opcode2A03NCC extends AbstractOpcode2A03NCC {
 	
 	private final GetterBusData getter;
 	
-	public Opcode2A03NCC(Cpu2A03 cpu, GetterBusData getter, Byte code, int cycle) {
+	public Opcode2A03NCC(NesCpu cpu, GetterBusData getter, Byte code, int cycle) {
 		super(cpu, code, cycle);
 		if (getter == null)
 			throw new IllegalArgumentException("Getter is NULL !");

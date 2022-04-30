@@ -2,13 +2,13 @@ package fr.tangv.mtnes.opcode.notabstract;
 
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusIOException;
-import fr.tangv.mtnes.cpu.Cpu2A03;
 import fr.tangv.mtnes.opcode.GetterBusData;
 import fr.tangv.mtnes.opcode.Opcode2A03;
+import fr.tangv.mtnes.processor.NesCpu;
 
 public class OpcodeSBC extends Opcode2A03 {
 
-	public OpcodeSBC(Cpu2A03 cpu, GetterBusData getter, Byte code, int cycle) {
+	public OpcodeSBC(NesCpu cpu, GetterBusData getter, Byte code, int cycle) {
 		super(cpu, getter, code, cycle);
 	}
 
@@ -17,7 +17,7 @@ public class OpcodeSBC extends Opcode2A03 {
 		BusData<Byte> ac = this.cpu.getAC();
 		int a = Byte.toUnsignedInt(ac.getData());
 		int m = Byte.toUnsignedInt(mem.getData());
-		int r = a + (0xFF - m) + (this.cpu.isSetFlags(Cpu2A03.FLAG_C) ? 1 : 0);
+		int r = a + (0xFF - m) + (this.cpu.isSetFlags(NesCpu.FLAG_C) ? 1 : 0);
 
 		boolean c7 = (r & 0xFFFF_0000) != 0;
 		final int MASK = 0x0000_8000;

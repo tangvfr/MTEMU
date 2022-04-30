@@ -1,34 +1,34 @@
 package fr.tangv.mtnes.opcode;
 
 import fr.tangv.mtemu.bus.BusDataR;
-import fr.tangv.mtnes.bus.Bus2A03;
-import fr.tangv.mtnes.cpu.Cpu2A03;
+import fr.tangv.mtnes.bus.NesBus;
+import fr.tangv.mtnes.processor.NesCpu;
 
 public abstract class BusDataProvider {
 	
-	public static final GetterBusData ACCUMULATOR = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ACCUMULATOR = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		return cpu.getAC();
 	};
 	
-	public static final GetterBusData ABSOLUTE = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ABSOLUTE = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		return bus.getCell((short) (cpu.addGetPC() | (cpu.addGetPC() << 8)));
 	};
 	
-	public static final GetterBusData ABSOLUTE_X = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ABSOLUTE_X = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		int adr = (cpu.addGetPC() | (cpu.addGetPC() << 8)) + Byte.toUnsignedInt(cpu.getX());
 		if (adr > 0x0000_FFFF)
 			op.add1CalcCycle();
 		return bus.getCell((short) adr);
 	};
 	
-	public static final GetterBusData ABSOLUTE_Y = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ABSOLUTE_Y = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		int adr = (cpu.addGetPC() | (cpu.addGetPC() << 8)) + Byte.toUnsignedInt(cpu.getY());
 		if (adr > 0x0000_FFFF)
 			op.add1CalcCycle();
 		return bus.getCell((short) adr);
 	};
 	
-	public static final GetterBusData IMMEDIATE = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData IMMEDIATE = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		return new BusDataR<Byte>(cpu.addGetPC());
 	};
 	
@@ -38,17 +38,17 @@ public abstract class BusDataProvider {
 	};
 	*/
 	
-	public static final GetterBusData INDIRECT	 = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData INDIRECT	 = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		short adr = (short) (cpu.addGetPC() | (cpu.addGetPC() << 8));
 		return bus.getCell((short) (bus.read(adr) | (bus.read((short) (adr + 1)) << 8)));
 	};
 	
-	public static final GetterBusData INDIRECT_X = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData INDIRECT_X = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		short adr = (byte) (cpu.addGetPC() + cpu.getX());
 		return bus.getCell((short) (bus.read(adr) | (bus.read((short) (adr + 1)) << 8)));
 	};	
 	
-	public static final GetterBusData INDIRECT_Y = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData INDIRECT_Y = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		short adrT = (byte) cpu.addGetPC();
 		int adr = (bus.read(adrT) | (bus.read((short) (adrT + 1)) << 8)) + Byte.toUnsignedInt(cpu.getY());
 		if (adr > 0x0000_FFFF)
@@ -68,15 +68,15 @@ public abstract class BusDataProvider {
 	};
 	*/
 	
-	public static final GetterBusData ZEROPAGE = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ZEROPAGE = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		return bus.getCell((short) (0x00FF & cpu.addGetPC()));
 	};
 	
-	public static final GetterBusData ZEROPAGE_X = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ZEROPAGE_X = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		return bus.getCell((short) (Byte.toUnsignedInt(cpu.addGetPC()) + Byte.toUnsignedInt(cpu.getX())));
 	};
 	
-	public static final GetterBusData ZEROPAGE_Y = (AbstractOpcode2A03NCC op, Cpu2A03 cpu, Bus2A03 bus) -> {
+	public static final GetterBusData ZEROPAGE_Y = (AbstractOpcode2A03NCC op, NesCpu cpu, NesBus bus) -> {
 		return bus.getCell((short) (Byte.toUnsignedInt(cpu.addGetPC()) + Byte.toUnsignedInt(cpu.getY())));
 	};
 
