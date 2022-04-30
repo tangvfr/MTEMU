@@ -197,7 +197,7 @@ public class NesCpu extends BusProcessor<NesBus> {
 		new OpcodeJMP(this, (byte) 0x4C, 3);
 		new OpcodeJMPI(this, (byte) 0x6C, 5);
 		//JSR
-		new OpcodeJSR(null, (byte) 0x20, 6);
+		new OpcodeJSR(this, (byte) 0x20, 6);
 		//LDA
 		new OpcodeLDA(this, BusDataProvider.IMMEDIATE, (byte) 0xA9, 2);
 		new OpcodeLDA(this, BusDataProvider.ZEROPAGE, (byte) 0xA5, 3);
@@ -351,7 +351,34 @@ public class NesCpu extends BusProcessor<NesBus> {
 		return this.interupt(NesCpu.NMI_ADR);
 	}
 	
-	public int interuptRES() throws BusIOException {
+	public int powerUp() throws BusIOException {
+		//register = 0
+		this.sr = 0x34;
+		this.ac.setData((byte) 0x0);
+		this.x = (byte) 0x0;
+		this.y = (byte) 0x0;
+		this.sp = (byte) 0xFD;
+		
+		//0x4017 & 0x4015 = 0
+		this.getBus().write((short) 0x4017, (byte) 0);
+		this.getBus().write((short) 0x4015, (byte) 0);
+		
+		//0x4000-0x4013 = 0x00
+		for (short i = 0x4000; i < 0x4014; i++)
+			this.getBus().write(i, (byte) 0);
+		
+		//set start prog
+		return this.setPcReset();
+	}
+	
+	public int reset() throws BusIOException {
+		
+		//will do
+		
+		return this.setPcReset();
+	}
+	
+	private int setPcReset() throws BusIOException {
 		short adr = NesCpu.RES_ADR;
 		//set new adr
 		NesBus bus = this.getBus();
@@ -394,11 +421,11 @@ public class NesCpu extends BusProcessor<NesBus> {
 	
 	public Byte stackPull() throws BusIOException {
 		this.sp++;
-		return this.getBus().read((short) (NesBus.STACK | sp));
+		return this.getBus().read((short) (0x0100 | sp));
 	}
 	
 	public void stackPush(Byte data) throws BusIOException {
-		this.getBus().write((short) (NesBus.STACK | sp), data);
+		this.getBus().write((short) (0x0100 | sp), data);
 		this.sp--;
 	}
 	

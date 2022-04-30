@@ -1,4 +1,4 @@
-package fr.tangv.mtnes.castridge;
+package fr.tangv.mtnes.castridge.rom;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 import fr.tangv.mtemu.comp.Rom16A8D;
 
-public class FileNesCartridge extends NesCartridge {
+public class NesRomCartridgeFile extends NesRomCartridge {
 
 	private Rom16A8D trainerRom;
 	private Rom16A8D prgRom;
@@ -22,24 +22,24 @@ public class FileNesCartridge extends NesCartridge {
 	private byte mapperNumber;
 	
 	
-	public FileNesCartridge(String file) throws IOException {
+	public NesRomCartridgeFile(String file) throws IOException {
 		this(new FileInputStream(file));
 	}
 	
-	public FileNesCartridge(File file) throws IOException {
+	public NesRomCartridgeFile(File file) throws IOException {
 		this(new FileInputStream(file));
 	}
 	
-	public FileNesCartridge(InputStream in) throws IOException {
+	public NesRomCartridgeFile(InputStream in) throws IOException {
 		byte[] head = new byte[4];
 		readBytes(in, head);
-		if (head[0] == NesCartridge.HEAD_FILE[0]
-			&& head[1] == NesCartridge.HEAD_FILE[1]
-			&& head[2] == NesCartridge.HEAD_FILE[2]
-			&& head[3] == NesCartridge.HEAD_FILE[3]
+		if (head[0] == NesRomCartridge.HEAD_FILE[0]
+			&& head[1] == NesRomCartridge.HEAD_FILE[1]
+			&& head[2] == NesRomCartridge.HEAD_FILE[2]
+			&& head[3] == NesRomCartridge.HEAD_FILE[3]
 			) {
-			this.prgRomSize = nextByte(in) * 16_384;
-			this.chrRomSize = nextByte(in) * 8_192;
+			this.prgRomSize = Byte.toUnsignedInt(nextByte(in)) * 16_384;
+			this.chrRomSize = Byte.toUnsignedInt(nextByte(in)) * 8_192;
 			byte flag6 = nextByte(in);
 			//flag6
 			this.mirroringArrangement = (flag6 & 0b0001) == 0b0001;

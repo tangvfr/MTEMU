@@ -6,11 +6,6 @@ import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusIOException;
 
 public class PpuBus extends AbstractBus<Short, Byte> {
-
-	//MAX
-	public static final short MAX = (short) 0xFFFF;
-	
-
 	
 	public PpuBus() {
 		

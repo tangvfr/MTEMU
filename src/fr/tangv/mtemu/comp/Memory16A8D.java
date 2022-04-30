@@ -39,7 +39,7 @@ public abstract class Memory16A8D<T extends BusData<Byte>> implements Bus<Short,
 	public T getCell(Short adr) throws BusIOException {
 		int address = Short.toUnsignedInt(adr);
 		if (address > this.memory.length)
-			throw new BusIOException("0x" + Integer.toHexString(adr) + " address is too high for this " 
+			throw new BusIOException("0x" + Integer.toHexString(address) + " address is too high for this " 
 					+ this.getClass().getSimpleName() + " with " + Integer.toHexString(this.memory.length) + " !");
 		return (T) this.memory[address];
 	}

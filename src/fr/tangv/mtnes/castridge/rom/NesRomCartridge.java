@@ -1,8 +1,8 @@
-package fr.tangv.mtnes.castridge;
+package fr.tangv.mtnes.castridge.rom;
 
 import fr.tangv.mtemu.comp.Rom16A8D;
 
-public abstract class NesCartridge {
+public abstract class NesRomCartridge {
 
 	public static final byte[] HEAD_FILE = {0x4E, 0x45, 0x53, 0x1A};
 	public static final boolean HORIZONTAL_MIRRORING_ARRANGEMENT = false;
