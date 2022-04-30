@@ -3,7 +3,7 @@ package fr.tangv.mtnes.processor;
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusDataRW;
 import fr.tangv.mtemu.bus.BusIOException;
-import fr.tangv.mtemu.processor.Processor;
+import fr.tangv.mtemu.comp.BusProcessor;
 import fr.tangv.mtnes.bus.NesBus;
 import fr.tangv.mtnes.opcode.AbstractOpcode2A03NCC;
 import fr.tangv.mtnes.opcode.BranchOpcode2A03;
@@ -49,7 +49,7 @@ import fr.tangv.mtnes.opcode.notabstract.OpcodeTXA;
 import fr.tangv.mtnes.opcode.notabstract.OpcodeTXS;
 import fr.tangv.mtnes.opcode.notabstract.OpcodeTYA;
 
-public class NesCpu extends Processor<NesBus> {
+public class NesCpu extends BusProcessor<NesBus> {
 
 	/*Flag Carry*/
 	public static final byte FLAG_C = 0b0000_0001;
@@ -76,7 +76,7 @@ public class NesCpu extends Processor<NesBus> {
 	/*PC	program counter	(16 bit)*/
 	private short pc;
 	/*AC	accumulator	(8 bit)*/
-	private BusData<Byte> ac;
+	private BusDataRW<Byte> ac;
 	/*X	X register	(8 bit)*/
 	private byte x;
 	/*Y	Y register	(8 bit)*/

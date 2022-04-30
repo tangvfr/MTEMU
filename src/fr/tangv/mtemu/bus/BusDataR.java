@@ -1,6 +1,6 @@
 package fr.tangv.mtemu.bus;
 
-public class BusDataR<T extends Number> extends BusData<T> {
+public class BusDataR<T extends Number> extends AbstractBusData<T> {
 
 	public BusDataR(T data) {
 		super(data);

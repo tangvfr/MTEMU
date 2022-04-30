@@ -1,5 +1,6 @@
 package fr.tangv.mtemu.comp;
 
+import fr.tangv.mtemu.bus.AbstractBusData;
 import fr.tangv.mtemu.bus.Bus;
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusIOException;
@@ -20,7 +21,7 @@ public abstract class Memory16A8D<T extends BusData<Byte>> implements Bus<Short,
 		if (size > Short.toUnsignedInt(Short.MIN_VALUE))
 			throw new IllegalArgumentException("Size is too length !");
 	
-		this.memory = new BusData[size];
+		this.memory = new AbstractBusData[size];
 	}
 	
 	@Override
