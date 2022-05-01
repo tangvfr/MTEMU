@@ -6,7 +6,7 @@ import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtemu.comp.Ram16A8D;
 import fr.tangv.mtemu.comp.Registers16AD8;
 import fr.tangv.mtnes.Nes;
-import fr.tangv.mtnes.castridge.NesCastridge;
+import fr.tangv.mtnes.castridge.AbstractNesCastridge;
 import fr.tangv.mtnes.processor.NesPpu;
 
 public class NesBus extends AbstractBus<Short, Byte> {
@@ -45,7 +45,7 @@ public class NesBus extends AbstractBus<Short, Byte> {
 					cell = this.apuR.getCell((short) (adr & 0x001F));
 				} else {//CASTRIDGE
 					System.out.println("CASTRIDGE");
-					NesCastridge castridge = this.nes.getCastridge();
+					AbstractNesCastridge castridge = this.nes.getCastridge();
 					if (castridge == null)
 						throw new BusIOException("NES haven't castridge !");
 					castridge.getCell(adr);

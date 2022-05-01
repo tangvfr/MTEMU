@@ -3,11 +3,11 @@ package fr.tangv.mtnes.castridge;
 import fr.tangv.mtemu.bus.AbstractBus;
 import fr.tangv.mtnes.Nes;
 
-public abstract class NesCastridge extends AbstractBus<Short, Byte> {
+public abstract class AbstractNesCastridge extends AbstractBus<Short, Byte> {
 
 	private final Nes nes;
 	
-	public NesCastridge(Nes nes) {
+	public AbstractNesCastridge(Nes nes) {
 		this.nes = nes;
 	}
 	
