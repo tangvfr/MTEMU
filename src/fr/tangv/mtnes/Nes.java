@@ -16,7 +16,7 @@ public class Nes {
 	private AbstractNesCastridge castridge;
 
 	public Nes() {
-		this.ppu = new NesPpu(this, new PpuBus());
+		this.ppu = new NesPpu(this, new PpuBus(this));
 		this.apu = new NesApu();
 		this.cpu = new NesCpu(new NesBus(this));
 	}
