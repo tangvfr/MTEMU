@@ -9,25 +9,29 @@ import fr.tangv.mtemu.bus.InternBusDataW;
 import fr.tangv.mtemu.comp.BusProcessor;
 import fr.tangv.mtemu.comp.Registers16AD8;
 import fr.tangv.mtnes.Nes;
-import fr.tangv.mtnes.bus.PpuBus;
+import fr.tangv.mtnes.bus.ppu.ControllerBusData;
+import fr.tangv.mtnes.bus.ppu.PpuBus;
 
 public class NesPpu extends BusProcessor<PpuBus> {
 
-	private Nes nes;
-	private InternBusDataW<Byte> ppuCtrl;
-	private InternBusDataW<Byte> ppuMask;
-	private InternBusDataR<Byte> ppuStatus;
-	private InternBusDataW<Byte> oamAddr;
-	private InternBusDataW<Byte> oamData;
-	private InternBusDataW<Byte> ppuScroll;
-	private InternBusDataW<Byte> ppuAddr;
-	private BusDataRW<Byte> ppuData;
-	private InternBusDataW<Byte> oamDma;
+	private final Nes nes;
+	private final ControllerBusData ppuCtrl;
+	private final InternBusDataW<Byte> ppuMask;
+	private final InternBusDataR<Byte> ppuStatus;
+	private final InternBusDataW<Byte> oamAddr;
+	private final InternBusDataW<Byte> oamData;
+	private final InternBusDataW<Byte> ppuScroll;
+	private final InternBusDataW<Byte> ppuAddr;
+	private final BusDataRW<Byte> ppuData;
+	private final InternBusDataW<Byte> oamDma;
+	//data render
+	
+	
 	
 	public NesPpu(Nes nes, PpuBus bus) {
 		super("NES PPU", bus);
 		this.nes = nes;
-		this.ppuCtrl = new InternBusDataW<Byte>((byte) 0);
+		this.ppuCtrl = new ControllerBusData();
 		this.ppuMask = new InternBusDataW<Byte>((byte) 0);
 		this.ppuStatus = new InternBusDataR<Byte>((byte) 0);
 		this.oamAddr = new InternBusDataW<Byte>((byte) 0);
@@ -64,5 +68,7 @@ public class NesPpu extends BusProcessor<PpuBus> {
 	public AbstractBusData<Byte> getOamDma() {
 		return this.oamDma;
 	}
+	
+	
 
 }

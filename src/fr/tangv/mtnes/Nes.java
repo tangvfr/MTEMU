@@ -2,7 +2,7 @@ package fr.tangv.mtnes;
 
 import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtnes.bus.NesBus;
-import fr.tangv.mtnes.bus.PpuBus;
+import fr.tangv.mtnes.bus.ppu.PpuBus;
 import fr.tangv.mtnes.castridge.AbstractNesCastridge;
 import fr.tangv.mtnes.processor.NesApu;
 import fr.tangv.mtnes.processor.NesCpu;

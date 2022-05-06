@@ -48,7 +48,7 @@ public class NesBus extends AbstractBus<Short, Byte> {
 					AbstractNesCastridge castridge = this.nes.getCastridge();
 					if (castridge == null)
 						throw new BusIOException("NES haven't castridge !");
-					castridge.getCell(adr);
+					castridge.getCellCpu(adr);
 				}
 			}
 		}

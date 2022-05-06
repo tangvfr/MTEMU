@@ -1,4 +1,4 @@
-package fr.tangv.mtnes.bus;
+package fr.tangv.mtnes.bus.ppu;
 
 import fr.tangv.mtemu.bus.AbstractBus;
 import fr.tangv.mtemu.bus.AbstractBusData;
@@ -41,7 +41,7 @@ public class PpuBus extends AbstractBus<Short, Byte> {
 			AbstractNesCastridge castridge = this.nes.getCastridge();
 			if (castridge == null)
 				throw new BusIOException("NES haven't castridge !");
-			castridge.getCell(adr);
+			castridge.getCellPpu(adr);
 		} else if (address < 0x3F00) {//nametable
 			System.out.println("PPU NAMETABLE");
 			cell = nametables[(address >>> 10) & 0x3]
