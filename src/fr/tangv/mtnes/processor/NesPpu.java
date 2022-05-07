@@ -4,20 +4,21 @@ import fr.tangv.mtemu.bus.AbstractBusData;
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusDataRW;
 import fr.tangv.mtemu.bus.BusIOException;
-import fr.tangv.mtemu.bus.InternBusDataR;
 import fr.tangv.mtemu.bus.InternBusDataW;
 import fr.tangv.mtemu.comp.BusProcessor;
 import fr.tangv.mtemu.comp.Registers16AD8;
 import fr.tangv.mtnes.Nes;
 import fr.tangv.mtnes.bus.ppu.ControllerBusData;
+import fr.tangv.mtnes.bus.ppu.MaskBusData;
 import fr.tangv.mtnes.bus.ppu.PpuBus;
+import fr.tangv.mtnes.bus.ppu.StatusBusData;
 
 public class NesPpu extends BusProcessor<PpuBus> {
 
 	private final Nes nes;
 	private final ControllerBusData ppuCtrl;
-	private final InternBusDataW<Byte> ppuMask;
-	private final InternBusDataR<Byte> ppuStatus;
+	private final MaskBusData ppuMask;
+	private final StatusBusData ppuStatus;
 	private final InternBusDataW<Byte> oamAddr;
 	private final InternBusDataW<Byte> oamData;
 	private final InternBusDataW<Byte> ppuScroll;
@@ -32,8 +33,8 @@ public class NesPpu extends BusProcessor<PpuBus> {
 		super("NES PPU", bus);
 		this.nes = nes;
 		this.ppuCtrl = new ControllerBusData();
-		this.ppuMask = new InternBusDataW<Byte>((byte) 0);
-		this.ppuStatus = new InternBusDataR<Byte>((byte) 0);
+		this.ppuMask = new MaskBusData();
+		this.ppuStatus = new StatusBusData();
 		this.oamAddr = new InternBusDataW<Byte>((byte) 0);
 		this.oamData = new InternBusDataW<Byte>((byte) 0);
 		this.ppuScroll = new InternBusDataW<Byte>((byte) 0);
