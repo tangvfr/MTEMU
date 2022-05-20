@@ -40,9 +40,7 @@ public class NesApu extends Processor {
 	@Override
 	public int runCycle() throws BusIOException {
 		int cycles = 0;
-		
-		
-		
+		//will do
 		return cycles;
 	}
 
@@ -75,7 +73,7 @@ public class NesApu extends Processor {
 				this.dmc.getSettingq3(),
 				this.dmc.getSettingq4(),
 				//oam dma
-				ppu.getOamDma(),
+				new BusDataD<Byte>(),
 				//status
 				this.status,
 				//joypad1
@@ -92,6 +90,14 @@ public class NesApu extends Processor {
 				this.disableBD,
 				this.disableBD,
 			});
+	}
+
+	public NesJoyPad getJoypad1() {
+		return joypad1;
+	}
+
+	public NesJoyPad getJoypad2() {
+		return joypad2;
 	}
 	
 }

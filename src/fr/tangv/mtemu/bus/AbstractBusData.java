@@ -10,7 +10,7 @@ public abstract class AbstractBusData<T extends Number> implements BusData<T> {
 
 	@Override
 	public String toString() {
-		return data.toString();
+		return this.data.toString();
 	}
 	
 }

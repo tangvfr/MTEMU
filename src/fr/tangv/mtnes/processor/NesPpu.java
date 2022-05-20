@@ -1,6 +1,5 @@
 package fr.tangv.mtnes.processor;
 
-import fr.tangv.mtemu.bus.AbstractBusData;
 import fr.tangv.mtemu.bus.BusData;
 import fr.tangv.mtemu.bus.BusDataRW;
 import fr.tangv.mtemu.bus.BusIOException;
@@ -8,9 +7,12 @@ import fr.tangv.mtemu.bus.InternBusDataW;
 import fr.tangv.mtemu.comp.BusProcessor;
 import fr.tangv.mtemu.comp.Registers16AD8;
 import fr.tangv.mtnes.Nes;
+import fr.tangv.mtnes.bus.ppu.AddrBusData;
 import fr.tangv.mtnes.bus.ppu.ControllerBusData;
+import fr.tangv.mtnes.bus.ppu.DataBusData;
 import fr.tangv.mtnes.bus.ppu.MaskBusData;
 import fr.tangv.mtnes.bus.ppu.PpuBus;
+import fr.tangv.mtnes.bus.ppu.ScrollBusData;
 import fr.tangv.mtnes.bus.ppu.StatusBusData;
 
 public class NesPpu extends BusProcessor<PpuBus> {
@@ -20,11 +22,10 @@ public class NesPpu extends BusProcessor<PpuBus> {
 	private final MaskBusData ppuMask;
 	private final StatusBusData ppuStatus;
 	private final InternBusDataW<Byte> oamAddr;
-	private final InternBusDataW<Byte> oamData;
-	private final InternBusDataW<Byte> ppuScroll;
-	private final InternBusDataW<Byte> ppuAddr;
-	private final BusDataRW<Byte> ppuData;
-	private final InternBusDataW<Byte> oamDma;
+	private final BusDataRW<Byte> oamData;
+	private final ScrollBusData ppuScroll;
+	private final AddrBusData ppuAddr;
+	private final DataBusData ppuData;
 	//data render
 	
 	
@@ -33,14 +34,13 @@ public class NesPpu extends BusProcessor<PpuBus> {
 		super("NES PPU", bus);
 		this.nes = nes;
 		this.ppuCtrl = new ControllerBusData();
-		this.ppuMask = new MaskBusData();
+		this.ppuMask = new MaskBusData(nes);
 		this.ppuStatus = new StatusBusData();
 		this.oamAddr = new InternBusDataW<Byte>((byte) 0);
-		this.oamData = new InternBusDataW<Byte>((byte) 0);
-		this.ppuScroll = new InternBusDataW<Byte>((byte) 0);
-		this.ppuAddr = new InternBusDataW<Byte>((byte) 0);
-		this.ppuData = new BusDataRW<Byte>((byte) 0);
-		this.oamDma = new InternBusDataW<Byte>((byte) 0);
+		this.oamData = new BusDataRW<Byte>((byte) 0);
+		this.ppuScroll = new ScrollBusData();
+		this.ppuAddr = new AddrBusData();
+		this.ppuData = new DataBusData(bus, ppuAddr, ppuCtrl);
 	}
 
 	@Override
@@ -65,11 +65,5 @@ public class NesPpu extends BusProcessor<PpuBus> {
 				this.ppuData
 			});
 	}
-	
-	public AbstractBusData<Byte> getOamDma() {
-		return this.oamDma;
-	}
-	
-	
 
 }

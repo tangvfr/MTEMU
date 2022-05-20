@@ -3,13 +3,14 @@ package fr.tangv.mtnes;
 import fr.tangv.mtemu.bus.BusIOException;
 import fr.tangv.mtnes.bus.NesBus;
 import fr.tangv.mtnes.bus.ppu.PpuBus;
+import fr.tangv.mtnes.bus.ppu.PpuType;
 import fr.tangv.mtnes.castridge.AbstractNesCastridge;
 import fr.tangv.mtnes.processor.NesApu;
 import fr.tangv.mtnes.processor.NesCpu;
 import fr.tangv.mtnes.processor.NesPpu;
 
 public class Nes {
-
+	
 	private final NesCpu cpu;
 	private final NesApu apu;
 	private final NesPpu ppu;
@@ -21,13 +22,8 @@ public class Nes {
 		this.cpu = new NesCpu(new NesBus(this));
 	}
 	
-	public void powerUp() throws BusIOException {
-		this.cpu.powerUp();
-		//start loop
-	}
-	
-	public void powerDown() throws BusIOException {
-		//blakc screen, stop sound, and stop loop cycles
+	public PpuType getType() {
+		return this.castridge.getPpuType();
 	}
 	
 	public NesCpu getCpu() {

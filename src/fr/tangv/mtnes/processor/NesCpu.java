@@ -373,7 +373,7 @@ public class NesCpu extends BusProcessor<NesBus> {
 	
 	public int reset() throws BusIOException {
 		
-		//will do
+		//will do set ram
 		
 		return this.setPcReset();
 	}

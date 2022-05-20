@@ -2,9 +2,11 @@ package fr.tangv.mtnes.bus.ppu;
 
 import fr.tangv.mtemu.bus.AbstractBusDataW;
 import fr.tangv.mtemu.bus.BusIOException;
+import fr.tangv.mtnes.Nes;
 
 public class MaskBusData extends AbstractBusDataW<Byte> {
 
+	private final Nes nes;
 	private boolean greyscale;
 	private boolean showBackgroundLeftmost;
 	private boolean showSpritesLeftmost;
@@ -14,8 +16,9 @@ public class MaskBusData extends AbstractBusDataW<Byte> {
 	private boolean emphasizeGreen;
 	private boolean emphasizeBlue;
 	
-	public MaskBusData() {
+	public MaskBusData(Nes nes) {
 		super((byte) 0);
+		this.nes = nes;
 	}
 
 	@Override
@@ -40,47 +43,45 @@ public class MaskBusData extends AbstractBusDataW<Byte> {
 	}
 
 	public boolean isGreyscale() {
-		return greyscale;
+		return this.greyscale;
 	}
 
 	public boolean isShowBackgroundLeftmost() {
-		return showBackgroundLeftmost;
+		return this.showBackgroundLeftmost;
 	}
 
 	public boolean isShowSpritesLeftmost() {
-		return showSpritesLeftmost;
+		return this.showSpritesLeftmost;
 	}
 
 	public boolean isShowBackground() {
-		return showBackground;
+		return this.showBackground;
 	}
 
 	public boolean isShowSprites() {
-		return showSprites;
-	}
-
-	public boolean isEmphasizeRedNTSC() {
-		return emphasizeRed;
-	}
-
-	public boolean isEmphasizeGreenNTSC() {
-		return emphasizeGreen;
-	}
-
-	public boolean isEmphasizeBlueNTSC() {
-		return emphasizeBlue;
+		return this.showSprites;
 	}
 	
-	public boolean isEmphasizeRedPAL() {
-		return emphasizeGreen;
+	public boolean isEmphasizeRed() {
+		boolean val;
+		if (this.nes.getType() == PpuType.PAL)
+			val = this.emphasizeGreen;
+		else
+			val = this.emphasizeRed;
+		return val;
 	}
 
-	public boolean isEmphasizeGreenPAL() {
-		return emphasizeRed;
+	public boolean isEmphasizeGreen() {
+		boolean val;
+		if (this.nes.getType() == PpuType.PAL)
+			val = this.emphasizeRed;
+		else
+			val = this.emphasizeGreen;
+		return val;
 	}
 
-	public boolean isEmphasizeBluePAL() {
-		return emphasizeBlue;
+	public boolean isEmphasizeBlue() {
+		return this.emphasizeBlue;
 	}
 
 }
