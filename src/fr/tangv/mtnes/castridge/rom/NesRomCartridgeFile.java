@@ -1,17 +1,17 @@
-package fr.tangv.mtcbs.castridge;
+package fr.tangv.mtnes.castridge.rom;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import fr.tangv.mtcbs.data.Rom;
+import fr.tangv.mtemu.comp.Rom16A8D;
 
-public class FileNESCartridge extends NESCartridge {
+public class NesRomCartridgeFile extends NesRomCartridge {
 
-	private Rom trainerRom;
-	private Rom prgRom;
-	private Rom chrRom;
+	private Rom16A8D trainerRom;
+	private Rom16A8D prgRom;
+	private Rom16A8D chrRom;
 	
 	private int prgRomSize;
 	private int chrRomSize;
@@ -22,41 +22,41 @@ public class FileNESCartridge extends NESCartridge {
 	private byte mapperNumber;
 	
 	
-	public FileNESCartridge(String file) throws IOException {
+	public NesRomCartridgeFile(String file) throws IOException {
 		this(new FileInputStream(file));
 	}
 	
-	public FileNESCartridge(File file) throws IOException {
+	public NesRomCartridgeFile(File file) throws IOException {
 		this(new FileInputStream(file));
 	}
 	
-	public FileNESCartridge(InputStream in) throws IOException {
+	public NesRomCartridgeFile(InputStream in) throws IOException {
 		byte[] head = new byte[4];
 		readBytes(in, head);
-		if (head[0] == NESCartridge.HEAD_FILE[0]
-			&& head[1] == NESCartridge.HEAD_FILE[1]
-			&& head[2] == NESCartridge.HEAD_FILE[2]
-			&& head[3] == NESCartridge.HEAD_FILE[3]
+		if (head[0] == NesRomCartridge.HEAD_FILE[0]
+			&& head[1] == NesRomCartridge.HEAD_FILE[1]
+			&& head[2] == NesRomCartridge.HEAD_FILE[2]
+			&& head[3] == NesRomCartridge.HEAD_FILE[3]
 			) {
-			this.prgRomSize = nextByte(in) * 16_384;
-			this.chrRomSize = nextByte(in) * 8_192;
+			this.prgRomSize = Byte.toUnsignedInt(nextByte(in)) * 16_384;
+			this.chrRomSize = Byte.toUnsignedInt(nextByte(in)) * 8_192;
 			byte flag6 = nextByte(in);
 			//flag6
-			this.mirroringArrangement = (flag6 & 0b0001) < 0;
-			this.persistentMemory = (flag6 & 0b0010) < 0;
-			this.trainer = (flag6 & 0b0100) < 0;
-			this.ignoreMirroringControl = (flag6 & 0b1000) < 0;
+			this.mirroringArrangement = (flag6 & 0b0001) == 0b0001;
+			this.persistentMemory = (flag6 & 0b0010) == 0b0010;
+			this.trainer = (flag6 & 0b0100) == 0b0010;
+			this.ignoreMirroringControl = (flag6 & 0b1000) == 0b1000;
 			this.mapperNumber = (byte) (flag6 >>> 4);
 			
 			//to jump to 0x16
 			readBytes(in, new byte[10]);
-			
+			/*
 			//Creation des ROM
 			//trainer
 			if (this.hasTrainer()) {
 				byte[] trainerBuf = new byte[512];
 				readBytes(in, trainerBuf);
-				this.trainerRom = new Rom(trainerBuf);
+				this.trainerRom = new Memory(trainerBuf);
 			} else {
 				this.trainerRom = null;
 			}
@@ -64,17 +64,17 @@ public class FileNESCartridge extends NESCartridge {
 			//prgRom
 			byte[] prgBuf = new byte[this.prgRomSize];
 			readBytes(in, prgBuf);
-			this.prgRom = new Rom(prgBuf);
+			this.prgRom = new Memory(prgBuf);
 			
 			//chrRom
 			if (!this.isUseChrRam()) {
 				byte[] chrRomBuf = new byte[this.chrRomSize];
 				readBytes(in, chrRomBuf);
-				this.chrRom= new Rom(chrRomBuf);
+				this.chrRom= new Memory(chrRomBuf);
 			} else {
 				this.chrRom = null;
 			}
-			
+			*/
 			//close stream
 			in.close();
 		} else {
@@ -100,17 +100,17 @@ public class FileNESCartridge extends NESCartridge {
 	}
 	
 	@Override
-	public Rom getPrgRom() {
+	public Rom16A8D getPrgRom() {
 		return this.prgRom;
 	}
 
 	@Override
-	public Rom getChrRom() {
+	public Rom16A8D getChrRom() {
 		return this.chrRom;
 	}
 
 	@Override
-	public Rom getTrainerRom() {
+	public Rom16A8D getTrainerRom() {
 		return this.trainerRom;
 	}
 
