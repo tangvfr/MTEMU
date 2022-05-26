@@ -24,7 +24,7 @@ public class Main {
 			}
 			
 			Nes nes = new Nes();
-			nes.powerUp();
+			nes.getCpu().powerUp();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (BusIOException e) {
